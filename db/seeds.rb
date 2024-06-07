@@ -1,7 +1,32 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
+require 'net/http'
+require 'json'
+
+# Limpa os dados do banco de dados antes de criar novos registros
+Campaign.destroy_all
+User.destroy_all
+
+# Cria um usuário administrador
+admin_user = User.create!(email: 'admin@email.com', password: '123456')
+
+# Método para obter produtos da Fake Store API
+def fetch_fake_store_products
+  url = 'https://fakestoreapi.com/products'
+  uri = URI(url)
+  response = Net::HTTP.get(uri)
+  JSON.parse(response)
+end
+
+# Obtém os produtos da API Fake Store
+products = fetch_fake_store_products
+
+# Cria campanhas de desconto para cada produto retornado da API, associando-as ao usuário administrador
+products.each do |product|
+  Campaign.create!(
+    title: product['title'],
+    description: product['description'],
+    start_date: Date.today,
+    end_date: Date.today + 1.month, 
+    product_id: product['id'],
+    user: admin_user
+  )
+end
