@@ -1,2 +1,36 @@
-<h1>Campaigns#index</h1>
-<p>Find me in app/views/campaigns/index.html.erb</p>
+<h1>All Campaigns</h1>
+
+<table class="table table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Original Price</th>
+      <th>Discounted Price</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @campaigns.each do |campaign| %>
+      <tr>
+      <td><%= campaign.title %></td>
+      <td><%= campaign.description %></td>
+      <td><%= campaign.product.price %></td>
+
+      <td><%= campaign.discounted_price %></td>
+      <td><%= campaign.discounted_price %></td>
+      <td><%= campaign.status %></td>
+      
+        <td>
+          <%= link_to 'Edit', edit_campaign_path(campaign), class: "btn btn-primary btn-sm" %>
+        </td>
+        <td>
+          <%= link_to 'View', campaign_path(campaign), class: "btn btn-info btn-sm" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'New Campaign', new_campaign_path, class: "btn btn-success" %>

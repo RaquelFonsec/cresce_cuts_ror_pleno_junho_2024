@@ -1,2 +1,15 @@
-<h1>Campaigns#show</h1>
-<p>Find me in app/views/campaigns/show.html.erb</p>
+
+<h1>Campaign Details</h1>
+<p><strong>Title:</strong> <%= @campaign.title %></p>
+<p><strong>Description:</strong> <%= @campaign.description %></p>
+<p><strong>Product:</strong> <%= @campaign.product.name %></p>
+<p><strong>Status:</strong> <%= @campaign.status %></p>
+
+<% if @campaign.user.present? && @campaign.created_at.present? %>
+  <p><strong>Created by:</strong> <%= @campaign.user.email %></p>
+  <p><strong>Created at:</strong> <%= @campaign.created_at.strftime("%d/%m/%Y, %H:%M") %></p>
+<% else %>
+  <p>No information available about who created this campaign and when.</p>
+<% end %>
+
+<%= link_to 'Back to Campaigns', campaigns_path %>

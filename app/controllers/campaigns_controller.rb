@@ -12,21 +12,14 @@ class CampaignsController < ApplicationController
 
   def new
     @campaign = Campaign.new
+    @products = Product.all
   end
-
-
+  
   def create
-    @campaign = current_user.campaigns.new(campaign_params)
-    @campaign.status = :pending
-  
-    if @campaign.product
-      @campaign.original_price = @campaign.product.price
-    end
-  
+    @campaign = Campaign.new(campaign_params)
     if @campaign.save
-      redirect_to @campaign, notice: 'A campanha foi criada com sucesso.'
+      redirect_to @campaign, notice: 'Campaign was successfully created.'
     else
-      @products = Product.all
       render :new
     end
   end

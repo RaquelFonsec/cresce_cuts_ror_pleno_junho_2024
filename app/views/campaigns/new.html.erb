@@ -1,2 +1,48 @@
-<h1>Campaigns#new</h1>
-<p>Find me in app/views/campaigns/new.html.erb</p>
+<div class="container d-flex justify-content-center">
+  <div class="card col-md-8">
+    <div class="card-body">
+      <%= form_for @campaign, html: { class: "row g-3" } do |form| %>
+        <!-- Campos para a campanha -->
+
+        <div class="col-md-6">
+          <%= form.label :title, "Title", class: "form-label" %>
+          <%= form.text_field :title, class: "form-control", placeholder: "Enter title" %>
+        </div>
+
+        <div class="col-md-6">
+          <%= form.label :description, "Description", class: "form-label" %>
+          <%= form.text_area :description, class: "form-control", placeholder: "Enter description" %>
+        </div>
+
+        <div class="col-md-6">
+          <%= form.label :start_date, "Start Date", class: "form-label" %>
+          <%= form.date_field :start_date, class: "form-control" %>
+        </div>
+
+        <div class="col-md-6">
+          <%= form.label :end_date, "End Date", class: "form-label" %>
+          <%= form.date_field :end_date, class: "form-control" %>
+        </div>
+
+        <div class="col-md-6">
+          <%= form.label :product_id, "Product", class: "form-label" %>
+          <%= form.collection_select :product_id, @products, :id, :name, { prompt: "Select a product" }, class: "form-select" %>
+        </div>
+
+        <div class="col-md-6">
+          <%= form.label :status, "Status", class: "form-label" %>
+          <%= form.select :status, Campaign.statuses.keys.map { |status| [status.humanize, status] }, { prompt: "Select a status" }, class: "form-select" %>
+        </div>
+
+        <!-- Formulário de criação de desconto -->
+        <%= form.fields_for :discounts, Discount.new do |discount_form| %>
+          <!-- Você pode adicionar aqui outros campos de desconto, se necessário -->
+        <% end %>
+
+        <div class="col-12">
+          <%= form.submit "Create Campaign", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
