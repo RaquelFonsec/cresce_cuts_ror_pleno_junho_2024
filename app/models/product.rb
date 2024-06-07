@@ -1,2 +1,5 @@
+
 class Product < ApplicationRecord
-end
+    has_many :discounts
+  end
+  

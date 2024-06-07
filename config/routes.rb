@@ -1,18 +1,15 @@
 Rails.application.routes.draw do
-  get 'discounts/create'
-  get 'discounts/update'
-  get 'discounts/destroy'
-  get 'campaigns/index'
-  get 'campaigns/show'
-  get 'campaigns/new'
-  get 'campaigns/create'
-  get 'campaigns/edit'
-  get 'campaigns/update'
-  get 'campaigns/destroy'
-  devise_for :users
-  root to: "pages#home"
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  # Routes for campaigns and their discounts
+  resources :campaigns do
+    resources :discounts, only: [:new, :create]
+    member do
+      get :revert_version
+    end
+  end
 
-  # Defines the root path route ("/")
-  # root "articles#index"
+  # Route for user authentication with Devise
+  devise_for :users
+
+  # Root route
+  root to: 'pages#home'
 end
