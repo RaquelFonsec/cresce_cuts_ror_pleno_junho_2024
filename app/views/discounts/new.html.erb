@@ -1,0 +1,30 @@
+<h1>New Discount</h1>
+
+<%= form_with(model: @discount, url: discounts_path) do |form| %>
+  <div class="mb-3">
+    <%= form.label :original_price, "Original Price", class: "form-label" %>
+    <%= form.text_field :original_price, class: "form-control" %>
+  </div>
+  
+  <div class="mb-3">
+    <%= form.label :discount_type, "Discount Type", class: "form-label" %>
+    <%= form.select :discount_type, [["Percentage", "percentage"], ["Fixed Amount", "fixed_amount"]], { prompt: "Select Discount Type" }, class: "form-select" %>
+  </div>
+  
+  <div class="mb-3">
+    <%= form.label :discount_value, "Discount Value", class: "form-label" %>
+    <%= form.number_field :discount_value, class: "form-control" %>
+  </div>
+  
+  <div class="mb-3">
+    <%= form.label :start_date, "Start Date", class: "form-label" %>
+    <%= form.date_field :start_date, class: "form-control" %>
+  </div>
+  
+  <div class="mb-3">
+    <%= form.label :end_date, "End Date", class: "form-label" %>
+    <%= form.date_field :end_date, class: "form-control" %>
+  </div>
+
+  <%= form.submit "Create Discount", class: "btn btn-primary" %>
+<% end %>
