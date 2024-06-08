@@ -1,13 +1,12 @@
 class CampaignsController < ApplicationController
-  before_action :set_campaign, only: [:show, :edit, :update, :destroy]
-  before_action :set_products, only: [:new, :edit, :create, :update]
+  before_action :set_campaign, only: %i[show edit update destroy]
+  before_action :load_products, only: %i[new edit create update]
 
   def index
     @campaigns = Campaign.includes(:product, :discount).all
   end
 
   def show
-    @campaign = Campaign.find(params[:id])
     @original_price = @campaign.product.price
     @discounted_price = @campaign.discounted_price
     @status = @campaign.calculated_status
@@ -17,25 +16,19 @@ class CampaignsController < ApplicationController
 
   def new
     @campaign = Campaign.new
-    @products = Product.all
   end
 
   def create
-    @campaign = Campaign.new(campaign_params.merge(user_id: current_user.id))
-    if campaign_params[:discount_attributes].present?
-      @discount = @campaign.build_discount(campaign_params[:discount_attributes].merge(user_id: current_user.id))
-    end
-    
-    if @campaign.save && (@discount.nil? || @discount.save)
+    @campaign = build_campaign
+    @discount = build_discount if discount_params_present?
+
+    if save_campaign_and_discount
       register_change(@campaign)
       redirect_to @campaign, notice: 'Campaign created successfully!'
     else
-      @products = Product.all
       render :new
     end
   end
-  
-  
 
   def edit
   end
@@ -59,12 +52,29 @@ class CampaignsController < ApplicationController
     @campaign = Campaign.find(params[:id])
   end
 
-  def set_products
+  def load_products
     @products = Product.all
   end
 
+  def build_campaign
+    Campaign.new(campaign_params.merge(user_id: current_user.id))
+  end
+
+  def build_discount
+    @campaign.build_discount(discount_params.merge(user_id: current_user.id))
+  end
+
+  def discount_params_present?
+    campaign_params[:discount_attributes].present?
+  end
+
+  def save_campaign_and_discount
+    @campaign.save && (@discount.nil? || @discount.save)
+  end
+
   def campaign_params
-    params.require(:campaign).permit(:title, :description, :start_date, :end_date, :product_id, :status, discount_attributes: [:discount_type, :discount_value])
+    params.require(:campaign).permit(:title, :description, :start_date, :end_date, :product_id, :status,
+                                     discount_attributes: %i[discount_type discount_value])
   end
 
   def register_change(campaign)

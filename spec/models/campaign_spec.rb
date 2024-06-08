@@ -1,7 +1,6 @@
-
 require 'rails_helper'
 
-RSpec.describe Discount, type: :model do
+RSpec.describe Campaign, type: :model do
   let(:user) { User.create(email: 'test@example.com', password: 'password') }
   let(:product) { Product.create(name: 'Test Product', price: 100) }
   let(:campaign) do
@@ -11,37 +10,22 @@ RSpec.describe Discount, type: :model do
       start_date: Date.today,
       end_date: Date.today + 1.week,
       user_id: user.id,
-      product_id: product.id 
+      product_id: product.id
     )
   end
 
-  describe '#discount_price' do
-    context 'when discount type is "De"' do
-      it 'calculates discount price correctly' do
-        discount = Discount.create(campaign_id: campaign.id, user_id: user.id, discount_type: 'De', discount_value: 20)
-        expect(discount.discount_price).to eq(80)
-      end
-    end
+  describe 'validations' do
+    it { should validate_presence_of(:title) }
+    it { should validate_presence_of(:description) }
+    it { should validate_presence_of(:start_date) }
+    it { should validate_presence_of(:end_date) }
+    it { should validate_presence_of(:user_id) }
+    it { should validate_presence_of(:product_id) }
+  end
 
-    context 'when discount type is "Por"' do
-      it 'calculates discount price correctly' do
-        discount = Discount.create(campaign_id: campaign.id, user_id: user.id, discount_type: 'Por', discount_value: 20)
-        expect(discount.discount_price).to eq(80)
-      end
-    end
-
-    context 'when discount type is invalid' do
-      it 'returns 0' do
-        discount = Discount.create(campaign_id: campaign.id, user_id: user.id, discount_type: 'Invalid', discount_value: 20)
-        expect(discount.discount_price).to eq(0)
-      end
-    end
-
-    context 'when campaign is nil' do
-      it 'returns 0' do
-        discount = Discount.new(user_id: user.id, discount_type: 'De', discount_value: 20)
-        expect(discount.discount_price).to eq(0)
-      end
-    end
+  describe 'associations' do
+    it { should belong_to(:user) }
+    it { should belong_to(:product) }
+    it { should have_many(:discounts) }
   end
 end

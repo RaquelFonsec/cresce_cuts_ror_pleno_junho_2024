@@ -15,19 +15,20 @@ class Discount < ApplicationRecord
   end
 
   def set_applied_info
-    if user.present?
-      self.applied_by = user.id
-      self.applied_at = Time.current
-    end
+    return unless user.present?
+
+    self.applied_by = user.id
+    self.applied_at = Time.current
   end
 
   def discount_price
-    return 0 unless campaign && campaign.product
+    return 0 unless campaign&.product
+
     case discount_type
     when 'De'
       campaign.product.price - discount_value
     when 'Por'
-      campaign.product.price * (1 - discount_value.to_f / 100.0)
+      campaign.product.price * (1 - (discount_value.to_f / 100.0))
     else
       0
     end

@@ -1,9 +1,6 @@
-
-require 'rails_helper'
-
 RSpec.describe "User logging in", type: :feature do
   it "allows a user to log in" do
-    user = User.create(email: "user@example.com", password: "password")
+    User.create(email: "user@example.com", password: "password")
 
     visit new_user_session_path
     fill_in "Email", with: "user@example.com"
