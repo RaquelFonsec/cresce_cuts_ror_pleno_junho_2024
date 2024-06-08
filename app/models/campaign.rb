@@ -1,57 +1,54 @@
 class Campaign < ApplicationRecord
-    has_many :discounts, dependent: :nullify
     belongs_to :user
     belongs_to :product
-    
-    attr_accessor :discount_rate
-    enum status: { active: 0, expired: 1, pending: 2 }
+    has_many :campaign_histories
+    has_many :discounts
+    has_one :discount
   
-    STATUSES = statuses.keys.freeze
+    validates :title, presence: true
+    enum status: { ativo: 0, expirado: 1 }
   
-    validates :title, :description, :start_date, :end_date, :product_id, presence: true
+    before_create :set_initial_status
     validate :end_date_after_start_date
   
-    before_save :calculate_discounted_price
-    before_create :set_initial_status
-    after_save :update_discounts_status
-  
-    def calculate_discounted_price
-      if product.present?
-        original_price = product.price
-        self.discount_rate = 0.2
-        discount_amount = original_price * discount_rate
-        self.discounted_price = original_price - discount_amount
-      end
+    def activate
+      update(status: :ativo)
+      register_change
     end
   
-    def set_initial_status
-      self.status ||= :pending
+    def expire
+      update(status: :expirado)
+      register_change
     end
   
-    def update_discounts_status
-      new_status = calculate_status
-      return if self.status == new_status
-      discounts.update_all(status: new_status)
+    def discounted_price
+      discount ? discount.discount_price : product.price
     end
   
-    def calculate_status
-      if start_date.present? && end_date.present?
-        if Date.current.between?(start_date, end_date)
-          :active
-        elsif Date.current > end_date
-          :expired
-        else
-          :pending
-        end
+    def calculated_status
+      if start_date > Date.current
+        'Agendado'
+      elsif end_date < Date.current
+        'Expirado'
       else
-        :pending
+        'Ativo'
       end
     end
   
     private
   
+    def set_initial_status
+      self.status ||= :ativo
+    end
+  
+    def register_change
+      campaign_histories.create(user_id: user_id, status: status, data_hora: Time.current)
+    end
+  
     def end_date_after_start_date
-      errors.add(:end_date, "must be after start date") if end_date.present? && start_date.present? && end_date <= start_date
+      return if end_date.blank? || start_date.blank?
+  
+      errors.add(:end_date, 'must be after start date') if end_date < start_date
     end
   end
   

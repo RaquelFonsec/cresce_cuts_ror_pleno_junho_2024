@@ -10,9 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_06_07_214203) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_08_000725) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "campaign_histories", force: :cascade do |t|
+    t.bigint "campaign_id", null: false
+    t.bigint "user_id", null: false
+    t.integer "status"
+    t.datetime "data_hora"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["campaign_id"], name: "index_campaign_histories_on_campaign_id"
+    t.index ["user_id"], name: "index_campaign_histories_on_user_id"
+  end
 
   create_table "campaigns", force: :cascade do |t|
     t.string "title"
@@ -61,6 +72,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_07_214203) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "campaign_histories", "campaigns"
+  add_foreign_key "campaign_histories", "users"
   add_foreign_key "campaigns", "products"
   add_foreign_key "campaigns", "users"
   add_foreign_key "discounts", "campaigns"

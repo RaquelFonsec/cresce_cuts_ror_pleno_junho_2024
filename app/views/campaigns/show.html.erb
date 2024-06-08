@@ -1,15 +1,39 @@
-
 <h1>Campaign Details</h1>
-<p><strong>Title:</strong> <%= @campaign.title %></p>
-<p><strong>Description:</strong> <%= @campaign.description %></p>
-<p><strong>Product:</strong> <%= @campaign.product.name %></p>
-<p><strong>Status:</strong> <%= @campaign.status %></p>
 
-<% if @campaign.user.present? && @campaign.created_at.present? %>
-  <p><strong>Created by:</strong> <%= @campaign.user.email %></p>
-  <p><strong>Created at:</strong> <%= @campaign.created_at.strftime("%d/%m/%Y, %H:%M") %></p>
-<% else %>
-  <p>No information available about who created this campaign and when.</p>
-<% end %>
+<p>
+  <strong>Title:</strong>
+  <%= @campaign.title %>
+</p>
 
-<%= link_to 'Back to Campaigns', campaigns_path %>
+<p>
+  <strong>Description:</strong>
+  <%= @campaign.description %>
+</p>
+
+<p>
+  <strong>Original Price:</strong>
+  <%= @original_price %>
+</p>
+
+<p>
+  <strong>Discounted Price:</strong>
+  <%= @discounted_price %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @status %>
+</p>
+
+<p>
+  <strong>Created by:</strong>
+  <%= @user.email %>
+</p>
+
+<p>
+  <strong>Created at:</strong>
+  <%= @created_at.strftime("%d/%m/%Y, %H:%M") %>
+</p>
+
+<%= link_to 'Edit', edit_campaign_path(@campaign), class: "btn btn-primary" %>
+<%= link_to 'Back', campaigns_path, class: "btn btn-secondary" %>

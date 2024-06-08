@@ -14,18 +14,13 @@
   <tbody>
     <% @campaigns.each do |campaign| %>
       <tr>
-      <td><%= campaign.title %></td>
-      <td><%= campaign.description %></td>
-      <td><%= campaign.product.price %></td>
-
-      <td><%= campaign.discounted_price %></td>
-      <td><%= campaign.discounted_price %></td>
-      <td><%= campaign.status %></td>
-      
+        <td><%= campaign.title %></td>
+        <td><%= campaign.description %></td>
+        <td><%= campaign.product.price %></td>
+        <td><%= campaign.discounted_price %></td>
+        <td><%= campaign.calculated_status %></td>
         <td>
           <%= link_to 'Edit', edit_campaign_path(campaign), class: "btn btn-primary btn-sm" %>
-        </td>
-        <td>
           <%= link_to 'View', campaign_path(campaign), class: "btn btn-info btn-sm" %>
         </td>
       </tr>

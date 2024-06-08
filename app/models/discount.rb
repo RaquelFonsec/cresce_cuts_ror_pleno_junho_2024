@@ -9,7 +9,6 @@ class Discount < ApplicationRecord
   validates :status, inclusion: { in: statuses.keys }
 
   before_validation :set_default_status, on: :create
-
   before_create :set_applied_info
 
   def set_default_status
