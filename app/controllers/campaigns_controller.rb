@@ -22,7 +22,11 @@ class CampaignsController < ApplicationController
 
   def create
     @campaign = Campaign.new(campaign_params.merge(user_id: current_user.id))
-    if @campaign.save
+    if campaign_params[:discount_attributes].present?
+      @discount = @campaign.build_discount(campaign_params[:discount_attributes].merge(user_id: current_user.id))
+    end
+    
+    if @campaign.save && (@discount.nil? || @discount.save)
       register_change(@campaign)
       redirect_to @campaign, notice: 'Campaign created successfully!'
     else
@@ -30,6 +34,8 @@ class CampaignsController < ApplicationController
       render :new
     end
   end
+  
+  
 
   def edit
   end
@@ -58,7 +64,7 @@ class CampaignsController < ApplicationController
   end
 
   def campaign_params
-    params.require(:campaign).permit(:title, :description, :start_date, :end_date, :product_id, :status)
+    params.require(:campaign).permit(:title, :description, :start_date, :end_date, :product_id, :status, discount_attributes: [:discount_type, :discount_value])
   end
 
   def register_change(campaign)

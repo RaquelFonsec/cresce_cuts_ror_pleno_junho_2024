@@ -2,8 +2,7 @@ class Discount < ApplicationRecord
   belongs_to :campaign
   belongs_to :user, optional: true
 
-  enum status: { active: 0, inactive: 1, expired: 2 }
-
+  enum status: { pending: 0, active: 1, expired: 2 }
   validates :discount_type, presence: true, inclusion: { in: ['De', 'Por'] }
   validates :discount_value, presence: true, numericality: { greater_than: 0 }
   validates :status, inclusion: { in: statuses.keys }
@@ -23,8 +22,7 @@ class Discount < ApplicationRecord
   end
 
   def discount_price
-    return 0 if campaign.nil?
-
+    return 0 unless campaign && campaign.product
     case discount_type
     when 'De'
       campaign.product.price - discount_value

@@ -35,9 +35,15 @@
         </div>
 
         <!-- Formulário de criação de desconto -->
-        <%= form.fields_for :discounts, Discount.new do |discount_form| %>
-          <!-- Você pode adicionar aqui outros campos de desconto, se necessário -->
-        <% end %>
+        <div class="col-md-6">
+          <%= form.fields_for :discount_attributes, @campaign.discount || @campaign.build_discount do |discount_form| %>
+            <%= discount_form.label :discount_type, "Discount Type", class: "form-label" %>
+            <%= discount_form.select :discount_type, [['De', 'De'], ['Por', 'Por']], { prompt: "Select a discount type" }, class: "form-select" %>
+
+            <%= discount_form.label :discount_value, "Discount Value", class: "form-label" %>
+            <%= discount_form.number_field :discount_value, class: "form-control", placeholder: "Enter discount value" %>
+          <% end %>
+        </div>
 
         <div class="col-12">
           <%= form.submit "Create Campaign", class: "btn btn-primary" %>
