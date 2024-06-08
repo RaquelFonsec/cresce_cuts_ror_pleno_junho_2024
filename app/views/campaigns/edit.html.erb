@@ -1,2 +1,41 @@
-<h1>Campaigns#edit</h1>
-<p>Find me in app/views/campaigns/edit.html.erb</p>
+<!-- app/views/campaigns/edit.html.erb -->
+
+<h1>Edit Campaign</h1>
+
+<%= form_for @campaign, html: { class: "form" } do |f| %>
+  <% if @campaign.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@campaign.errors.count, "error") %> prohibited this campaign from being saved:</h2>
+
+      <ul>
+      <% @campaign.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :title %>
+    <%= f.text_field :title, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :description %>
+    <%= f.text_area :description, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :start_date %>
+    <%= f.date_field :start_date, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :end_date %>
+    <%= f.date_field :end_date, class: "form-control" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Save Changes", class: "btn btn-primary" %>
+  </div>
+<% end %>
