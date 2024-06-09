@@ -4,9 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+        }
+        img {
+            display: block;
+            margin: 100px auto;
+            width: 90%;
+            max-width: 100%;
+            height: auto;
+        }
+        .navbar {
+            position: relative;
+            margin-bottom: 40px;
+        }
+        .button-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .button-container a {
+            color: white;
+            background-color: #8a2be2;
+            padding: 14px 28px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
-<img src="https://res.cloudinary.com/dbtr2yaho/image/upload/v1717861157/cresce_vendas_cover_n9lfoy.jpg" alt="Cresce Vendas" width="1910" height="900">
+    <img src="https://res.cloudinary.com/dbtr2yaho/image/upload/v1717966754/Banner-somo-uma-agencia-360_yup5le.jpg" alt="Cresce Vendas">
+    
+    <div class="navbar navbar-expand-sm navbar-light" style="height: 60px; display: flex; align-items: center; background-color: white;">
+        <div class="container-fluid" style="width: 100%;">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Alternar navegação">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto">
+                    <!--  itens da barra de navegação -->
+                </ul>
+            </div>
+        </div>
+    </div>
 
+    <div class="button-container">
+        <a href="/users/sign_in" class="button">faça login</a>
+    </div>
 </body>
 </html>
