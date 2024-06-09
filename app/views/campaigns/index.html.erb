@@ -1,40 +1,68 @@
-<h1>Todas Campanhas</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todas Campanhas</title>
+    <style>
+    body {
+        background-color: black;
+        color: white;
+    }
+    table {
+        background-color: #333;
+        color: white;
+    }
+    th, td {
+        border: 1px solid white;
+        padding: 8px;
+        text-align: left;
+    }
+    .btn {
+        background-color: #333;
+        color: white;
+    }
+    .btn:hover {
+        background-color: #555;
+    }
+</style>
+</head>
+<body>
+    <h1>Todas Campanhas</h1>
 
-<table class="table table-striped">
-  <thead class="thead-dark">
-    <tr>
-      <th>Produto</th>
-      <th>Descriçao</th>
-      <th>Preço original</th>
-      <th>Preço com Desconto</th>
-      <th>Status</th>
-      <th>Detalhes</th>
-      
-      
-    </tr>
-  </thead>
-  <tbody>
-    <% @campaigns.each do |campaign| %>
-      <tr>
-        <td><%= campaign.title %></td>
-        <td><%= campaign.description %></td>
-        <td><%= campaign.product.price %></td>
-        <td><%= campaign.discounted_price %></td>
-        <td><%= campaign.calculated_status %></td>
-        <td>
-          <% if campaign.image.attached? %>
-            <%= link_to campaign_path(campaign) do %>
-              <%= image_tag campaign.image, class: "img-thumbnail", style: "max-width: 100px; max-height: 100px;" %>
-            <% end %>
-          <% else %>
-            No Image
-          <% end %>
-        </td>
-        <td>
-          
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+    <table class="table table-striped">
+      <thead class="thead-dark">
+        <tr>
+          <th>Produto</th>
+          <th>Descrição</th>
+          <th>Preço original</th>
+          <th>Preço com Desconto</th>
+          <th>Status</th>
+          <th>Detalhes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @campaigns.each do |campaign| %>
+          <tr>
+            <td><%= campaign.title %></td>
+            <td><%= campaign.description %></td>
+            <td><%= campaign.product.price %></td>
+            <td><%= campaign.discounted_price %></td>
+            <td><%= campaign.calculated_status %></td>
+            <td>
+              <% if campaign.image.attached? %>
+                <%= link_to campaign_path(campaign) do %>
+                  <%= image_tag campaign.image, class: "img-thumbnail", style: "max-width: 100px; max-height: 100px;" %>
+                <% end %>
+              <% else %>
+                No Image
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
 
-<%= link_to 'Nova Campanha', new_campaign_path, class: "btn btn-success" %>
+    <%= link_to 'Nova Campanha', new_campaign_path, class: "btn btn-success" %>
+</body>
+</html>
