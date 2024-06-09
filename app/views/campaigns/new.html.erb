@@ -1,8 +1,6 @@
 <!-- app/views/campaigns/new.html.erb -->
 
-<h1>New Campaign</h1>
-
-<%= link_to 'Back', campaigns_path, class: "btn btn-primary" %>
+<h1 class="text-center mb-4">New Campaign</h1>
 
 <div class="container mt-5">
   <div class="row justify-content-center">
@@ -63,8 +61,10 @@
               </div>
             </div>
 
-            <%= form.submit "Create Campaign", class: "btn btn-primary" %>
+            <%= form.submit "Create Campaign", class: "btn btn-primary btn-block btn-sm" %>
           <% end %>
+          
+          <%= link_to 'Back', campaigns_path, class: "btn btn-secondary btn-block btn-sm mt-3" %>
         </div>
       </div>
     </div>
