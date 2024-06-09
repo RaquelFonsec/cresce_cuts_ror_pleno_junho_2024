@@ -1,7 +1,7 @@
 <div class="container mt-5">
   <h1 class="mb-4">Edit Campaign</h1>
 
-  <%= form_for @campaign, html: { class: "form" } do |f| %>
+  <%= form_for @campaign, html: { class: "form", multipart: true } do |f| %>
     <% if @campaign.errors.any? %>
       <div id="error_explanation" class="alert alert-danger">
         <h2><%= pluralize(@campaign.errors.count, "error") %> prohibited this campaign from being saved:</h2>
@@ -23,28 +23,31 @@
       <%= f.text_area :description, class: "form-control", placeholder: "Enter description" %>
     </div>
 
-    <div class="form-group">
-      <%= f.label :start_date, class: "form-label" %>
-      <%= f.date_field :start_date, class: "form-control" %>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <%= f.label :start_date, class: "form-label" %>
+        <%= f.date_field :start_date, class: "form-control" %>
+      </div>
+
+      <div class="form-group col-md-6">
+        <%= f.label :end_date, class: "form-label" %>
+        <%= f.date_field :end_date, class: "form-control" %>
+      </div>
     </div>
 
     <div class="form-group">
-      <%= f.label :end_date, class: "form-label" %>
-      <%= f.date_field :end_date, class: "form-control" %>
+      <%= f.label :image, "Upload Image", class: "form-label" %>
+      <%= f.file_field :image, class: "form-control-file" %>
     </div>
 
     <div class="form-group">
-      <label class="form-label">Original Price:</label>
-      <p><%= number_to_currency(@campaign.original_price) %></p>
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">Discounted Price:</label>
-      <p><%= number_to_currency(@campaign.discounted_price) %></p>
+      <%= f.label :discount_type, "Discount Type", class: "form-label" %>
+      <%= f.select :discount_type, [['De', 'De'], ['Por', 'Por']], { prompt: "Select a discount type" }, class: "form-control", style: "width: 50%;" %>
     </div>
 
     <div class="form-group">
       <%= f.submit "Save Changes", class: "btn btn-primary" %>
+      <%= link_to 'Back to Campaigns', campaigns_path, class: "btn btn-secondary" %>
     </div>
   <% end %>
 </div>

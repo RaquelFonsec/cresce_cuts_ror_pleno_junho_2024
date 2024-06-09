@@ -66,7 +66,9 @@ class CampaignsController < ApplicationController
   end
   
   
-
+  def campaign_params
+    params.require(:campaign).permit(:title, :description, :start_date, :end_date, :product_id, :status, :image, discount_attributes: [:discount_type, :discount_value])
+  end
   def discount_params_present?
     campaign_params[:discount_attributes].present?
   end
@@ -75,11 +77,7 @@ class CampaignsController < ApplicationController
     @campaign.save && (@discount.nil? || @discount.save)
   end
 
-  def campaign_params
-    params.require(:campaign).permit(:title, :description, :start_date, :end_date, :product_id, :status,
-                                     discount_attributes: %i[discount_type discount_value])
-  end
-
+  
   def register_change(campaign)
     campaign.campaign_histories.create(user_id: campaign.user_id, status: campaign.status, data_hora: Time.current)
   end

@@ -1,9 +1,15 @@
+<!-- app/views/campaigns/new.html.erb -->
+
+<h1>New Campaign</h1>
+
+<%= link_to 'Back', campaigns_path, class: "btn btn-primary" %>
+
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-6">
       <div class="card bg-light">
         <div class="card-body">
-          <%= form_for @campaign, html: { class: "row g-3 text-dark" } do |form| %>
+          <%= form_for @campaign, html: { class: "row g-3 text-dark" }, multipart: true do |form| %>
             <div class="mb-3">
               <%= form.label :title, "Title", class: "form-label text-primary" %>
               <%= form.text_field :title, class: "form-control form-control-sm" %>
@@ -34,6 +40,11 @@
             <div class="mb-3">
               <%= form.label :status, "Status", class: "form-label text-primary" %>
               <%= form.select :status, Campaign.statuses.keys.map { |status| [status.humanize, status] }, { prompt: "Select a status" }, { class: "form-select form-select-sm" } %>
+            </div>
+
+            <div class="mb-3">
+              <%= form.label :image, "Upload Image", class: "form-label text-primary" %>
+              <%= form.file_field :image, class: "form-control form-control-sm" %>
             </div>
 
             <div class="row g-3">

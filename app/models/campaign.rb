@@ -4,7 +4,8 @@ class Campaign < ApplicationRecord
   has_many :campaign_histories
   has_many :discounts
   has_one :discount
-
+  has_one_attached :image
+  attr_accessor :discount_type
   validates :title, presence: true
   validates :description, presence: true
   validates :start_date, presence: true
