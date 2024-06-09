@@ -1,54 +1,61 @@
-<div class="container d-flex justify-content-center">
-  <div class="card col-md-8">
-    <div class="card-body">
-      <%= form_for @campaign, html: { class: "row g-3" } do |form| %>
-        <!-- Campos para a campanha -->
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card bg-light">
+        <div class="card-body">
+          <%= form_for @campaign, html: { class: "row g-3 text-dark" } do |form| %>
+            <div class="mb-3">
+              <%= form.label :title, "Title", class: "form-label text-primary" %>
+              <%= form.text_field :title, class: "form-control form-control-sm" %>
+            </div>
 
-        <div class="col-md-6">
-          <%= form.label :title, "Title", class: "form-label" %>
-          <%= form.text_field :title, class: "form-control", placeholder: "Enter title" %>
-        </div>
+            <div class="mb-3">
+              <%= form.label :description, "Description", class: "form-label text-primary" %>
+              <%= form.text_area :description, class: "form-control form-control-sm", rows: 3 %>
+            </div>
 
-        <div class="col-md-6">
-          <%= form.label :description, "Description", class: "form-label" %>
-          <%= form.text_area :description, class: "form-control", placeholder: "Enter description" %>
-        </div>
+            <div class="row g-3">
+              <div class="col-6">
+                <%= form.label :start_date, "Start Date", class: "form-label text-primary" %>
+                <%= form.date_field :start_date, class: "form-control form-control-sm" %>
+              </div>
 
-        <div class="col-md-6">
-          <%= form.label :start_date, "Start Date", class: "form-label" %>
-          <%= form.date_field :start_date, class: "form-control" %>
-        </div>
+              <div class="col-6">
+                <%= form.label :end_date, "End Date", class: "form-label text-primary" %>
+                <%= form.date_field :end_date, class: "form-control form-control-sm" %>
+              </div>
+            </div>
 
-        <div class="col-md-6">
-          <%= form.label :end_date, "End Date", class: "form-label" %>
-          <%= form.date_field :end_date, class: "form-control" %>
-        </div>
+            <div class="mb-3">
+              <%= form.label :product_id, "Product", class: "form-label text-primary" %>
+              <%= form.collection_select :product_id, @products, :id, :name, { prompt: "Select a product" }, { class: "form-select form-select-sm" } %>
+            </div>
 
-        <div class="col-md-6">
-          <%= form.label :product_id, "Product", class: "form-label" %>
-          <%= form.collection_select :product_id, @products, :id, :name, { prompt: "Select a product" }, class: "form-select" %>
-        </div>
+            <div class="mb-3">
+              <%= form.label :status, "Status", class: "form-label text-primary" %>
+              <%= form.select :status, Campaign.statuses.keys.map { |status| [status.humanize, status] }, { prompt: "Select a status" }, { class: "form-select form-select-sm" } %>
+            </div>
 
-        <div class="col-md-6">
-          <%= form.label :status, "Status", class: "form-label" %>
-          <%= form.select :status, Campaign.statuses.keys.map { |status| [status.humanize, status] }, { prompt: "Select a status" }, class: "form-select" %>
-        </div>
+            <div class="row g-3">
+              <div class="col-6">
+                <%= form.fields_for :discount, @campaign.discount || @campaign.build_discount do |discount_form| %>
+                  <div class="mb-3">
+                    <%= discount_form.label :discount_type, "Discount Type", class: "form-label text-primary" %>
+                    <%= discount_form.select :discount_type, [['De', 'De'], ['Por', 'Por']], { prompt: "Select a discount type" }, class: "form-select form-select-sm" %>
+                  </div>
 
-        <!-- Formulário de criação de desconto -->
-        <div class="col-md-6">
-          <%= form.fields_for :discount_attributes, @campaign.discount || @campaign.build_discount do |discount_form| %>
-            <%= discount_form.label :discount_type, "Discount Type", class: "form-label" %>
-            <%= discount_form.select :discount_type, [['De', 'De'], ['Por', 'Por']], { prompt: "Select a discount type" }, class: "form-select" %>
+                  <div class="mb-3">
+                    <%= discount_form.label :discount_value, "Discount Value", class: "form-label text-primary" %>
+                    <%= discount_form.number_field :discount_value, class: "form-control form-control-sm" %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
 
-            <%= discount_form.label :discount_value, "Discount Value", class: "form-label" %>
-            <%= discount_form.number_field :discount_value, class: "form-control", placeholder: "Enter discount value" %>
+            <%= form.submit "Create Campaign", class: "btn btn-primary" %>
           <% end %>
         </div>
-
-        <div class="col-12">
-          <%= form.submit "Create Campaign", class: "btn btn-primary" %>
-        </div>
-      <% end %>
+      </div>
     </div>
   </div>
 </div>

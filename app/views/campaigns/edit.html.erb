@@ -1,50 +1,50 @@
-<h1>Edit Campaign</h1>
+<div class="container mt-5">
+  <h1 class="mb-4">Edit Campaign</h1>
 
-<%= form_for @campaign, html: { class: "form" } do |f| %>
-  <% if @campaign.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@campaign.errors.count, "error") %> prohibited this campaign from being saved:</h2>
+  <%= form_for @campaign, html: { class: "form" } do |f| %>
+    <% if @campaign.errors.any? %>
+      <div id="error_explanation" class="alert alert-danger">
+        <h2><%= pluralize(@campaign.errors.count, "error") %> prohibited this campaign from being saved:</h2>
+        <ul>
+        <% @campaign.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
 
-      <ul>
-      <% @campaign.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+    <div class="form-group">
+      <%= f.label :title, class: "form-label" %>
+      <%= f.text_field :title, class: "form-control", placeholder: "Enter title" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :description, class: "form-label" %>
+      <%= f.text_area :description, class: "form-control", placeholder: "Enter description" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :start_date, class: "form-label" %>
+      <%= f.date_field :start_date, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :end_date, class: "form-label" %>
+      <%= f.date_field :end_date, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Original Price:</label>
+      <p><%= number_to_currency(@campaign.original_price) %></p>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Discounted Price:</label>
+      <p><%= number_to_currency(@campaign.discounted_price) %></p>
+    </div>
+
+    <div class="form-group">
+      <%= f.submit "Save Changes", class: "btn btn-primary" %>
     </div>
   <% end %>
-
-  <div class="form-group">
-    <%= f.label :title %>
-    <%= f.text_field :title, class: "form-control" %>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :description %>
-    <%= f.text_area :description, class: "form-control" %>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :start_date %>
-    <%= f.date_field :start_date, class: "form-control" %>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :end_date %>
-    <%= f.date_field :end_date, class: "form-control" %>
-  </div>
-
-  <!-- Mostrar preço original e preço com desconto -->
-  <div class="form-group">
-    <label>Original Price:</label>
-    <p><%= number_to_currency(@campaign.original_price) %></p>
-  </div>
-
-  <div class="form-group">
-    <label>Discounted Price:</label>
-    <p><%= number_to_currency(@campaign.discounted_price) %></p>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Save Changes", class: "btn btn-primary" %>
-  </div>
-<% end %>
+</div>

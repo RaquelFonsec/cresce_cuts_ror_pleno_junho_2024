@@ -61,8 +61,11 @@ class CampaignsController < ApplicationController
   end
 
   def build_discount
-    @campaign.build_discount(discount_params.merge(user_id: current_user.id))
+    discount_attributes = params.require(:campaign).require(:discount_attributes).permit(:discount_type, :discount_value)
+    @campaign.build_discount(discount_attributes.merge(user_id: current_user.id))
   end
+  
+  
 
   def discount_params_present?
     campaign_params[:discount_attributes].present?
