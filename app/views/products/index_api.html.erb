@@ -1,0 +1,20 @@
+<!-- app/views/products/index_api.html.erb -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Products</title>
+</head>
+<body>
+  <h1>Products</h1>
+  
+  <% @products.each do |product| %>
+    <div class="product">
+      <h2><%= product['title'] %></h2>
+      <p><%= product['description'] %></p>
+      <p>Price: $<%= product['price'] %></p>
+      <img src="<%= product['image'] %>" alt="<%= product['title'] %>">
+    </div>
+  <% end %>
+</body>
+</html>
