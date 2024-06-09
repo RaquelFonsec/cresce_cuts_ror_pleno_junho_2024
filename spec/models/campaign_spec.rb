@@ -26,6 +26,8 @@ RSpec.describe Campaign, type: :model do
   describe 'associations' do
     it { should belong_to(:user) }
     it { should belong_to(:product) }
+    it { should have_many(:campaign_histories) }
     it { should have_many(:discounts) }
+    it { should have_one(:discount) }
   end
 end

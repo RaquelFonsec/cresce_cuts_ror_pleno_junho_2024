@@ -5,13 +5,21 @@ class Campaign < ApplicationRecord
   has_many :discounts
   has_one :discount
 
-  validate :calculate_discounted_price
   validates :title, presence: true
+  validates :description, presence: true
+  validates :start_date, presence: true
+  validates :end_date, presence: true
+  validates :user_id, presence: true
+  validates :product_id, presence: true
+
+  validate :calculate_discounted_price
+  validate :end_date_after_start_date
+
   enum status: { ativo: 0, expirado: 1 }
 
   before_create :set_initial_status
-  validate :end_date_after_start_date
   accepts_nested_attributes_for :discount
+
   def activate
     update(status: :ativo)
     register_change
@@ -27,11 +35,7 @@ class Campaign < ApplicationRecord
   end
 
   def discounted_price
-    if discount.present?
-      discount.discount_price
-    else
-      product.price
-    end
+    discount.present? ? discount.discount_price : product.price
   end
 
   def calculated_status
