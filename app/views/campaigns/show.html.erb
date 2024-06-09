@@ -1,4 +1,4 @@
-<h1>Campaign Details</h1>
+<h1>Detalhes da Campanha</h1>
 
 <div class="row">
   <div class="col-md-4">
@@ -46,6 +46,12 @@
     </p>
 
     <%= link_to 'Edit', edit_campaign_path(@campaign), class: "btn btn-primary" %>
+
+    <!-- Formulário para excluir a campanha -->
+    <%= form_for @campaign, method: :delete, html: { class: "d-inline" } do |f| %>
+      <%= f.submit 'Delete', data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+    <% end %>
+
     <%= link_to 'Back', campaigns_path, class: "btn btn-secondary" %>
   </div>
 </div>
