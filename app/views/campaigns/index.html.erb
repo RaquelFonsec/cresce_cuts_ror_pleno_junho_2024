@@ -8,7 +8,7 @@
       <th>Original Price</th>
       <th>Discounted Price</th>
       <th>Status</th>
-      <th>Image</th> <!-- Adicionando uma nova coluna para a imagem -->
+      <th>Image</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -21,15 +21,20 @@
         <td><%= campaign.discounted_price %></td>
         <td><%= campaign.calculated_status %></td>
         <td>
-          <% if campaign.image.attached? %> <!-- Verificando se a imagem está anexada à campanha -->
+          <% if campaign.image.attached? %>
             <%= image_tag campaign.image, class: "img-thumbnail", style: "max-width: 100px; max-height: 100px;" %>
           <% else %>
-            No Image <!-- Mensagem de fallback caso não haja imagem -->
+            No Image
           <% end %>
         </td>
         <td>
-          <%= link_to 'Edit', edit_campaign_path(campaign), class: "btn btn-primary btn-sm" %>
-          <%= link_to 'View', campaign_path(campaign), class: "btn btn-info btn-sm" %>
+        <td>
+        <%= link_to 'Edit', edit_campaign_path(campaign), class: "btn btn-primary btn-sm" %>
+        <%= link_to 'View', campaign_path(campaign), class: "btn btn-info btn-sm" %>
+        <%= button_to 'Delete', campaign_path(campaign), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger btn-sm" %>
+      </td>
+      
+         
         </td>
       </tr>
     <% end %>
