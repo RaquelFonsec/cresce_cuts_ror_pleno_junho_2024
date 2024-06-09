@@ -1,39 +1,51 @@
 <h1>Campaign Details</h1>
 
-<p>
-  <strong>Title:</strong>
-  <%= @campaign.title %>
-</p>
+<div class="row">
+  <div class="col-md-4">
+    <% if @campaign.image.attached? %>
+      <%= image_tag url_for(@campaign.image), class: "img-thumbnail" %>
+    <% else %>
+      <p>No image available</p>
+    <% end %>
+  </div>
 
-<p>
-  <strong>Description:</strong>
-  <%= @campaign.description %>
-</p>
+  <div class="col-md-8">
+    <p>
+      <strong>Title:</strong>
+      <%= @campaign.title %>
+    </p>
 
-<p>
-  <strong>Original Price:</strong>
-  <%= @original_price %>
-</p>
+    <p>
+      <strong>Description:</strong>
+      <%= @campaign.description %>
+    </p>
 
-<p>
-  <strong>Discounted Price:</strong>
-  <%= @discounted_price %>
-</p>
+    <p>
+      <strong>Original Price:</strong>
+      <%= @original_price %>
+    </p>
 
-<p>
-  <strong>Status:</strong>
-  <%= @status %>
-</p>
+    <p>
+      <strong>Discounted Price:</strong>
+      <%= @discounted_price %>
+    </p>
 
-<p>
-  <strong>Created by:</strong>
-  <%= @user.email %>
-</p>
+    <p>
+      <strong>Status:</strong>
+      <%= @status %>
+    </p>
 
-<p>
-  <strong>Created at:</strong>
-  <%= @created_at.strftime("%d/%m/%Y, %H:%M") %>
-</p>
+    <p>
+      <strong>Created by:</strong>
+      <%= @user.email %>
+    </p>
 
-<%= link_to 'Edit', edit_campaign_path(@campaign), class: "btn btn-primary" %>
-<%= link_to 'Back', campaigns_path, class: "btn btn-secondary" %>
+    <p>
+      <strong>Created at:</strong>
+      <%= @created_at.strftime("%d/%m/%Y, %H:%M") %>
+    </p>
+
+    <%= link_to 'Edit', edit_campaign_path(@campaign), class: "btn btn-primary" %>
+    <%= link_to 'Back', campaigns_path, class: "btn btn-secondary" %>
+  </div>
+</div>
