@@ -3,6 +3,7 @@ class Campaign < ApplicationRecord
   belongs_to :user
   belongs_to :product
   has_many :campaign_histories, dependent: :destroy
+  has_many :discounts
   has_one :discount, dependent: :destroy
   has_one_attached :image
   attr_accessor :discount_type

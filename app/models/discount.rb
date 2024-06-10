@@ -1,4 +1,3 @@
-# app/models/discount.rb
 class Discount < ApplicationRecord
   belongs_to :campaign
   belongs_to :user, optional: true
@@ -9,6 +8,7 @@ class Discount < ApplicationRecord
   validates :status, inclusion: { in: statuses.keys }
 
   before_validation :set_default_status
+  before_create :set_applied_info
 
   def discount_price
     return 0 unless campaign&.product
@@ -27,5 +27,12 @@ class Discount < ApplicationRecord
 
   def set_default_status
     self.status ||= :active
+  end
+
+  def set_applied_info
+    if user.present?
+      self.applied_by = user.id
+      self.applied_at = Time.current
+    end
   end
 end

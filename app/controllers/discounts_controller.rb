@@ -2,15 +2,18 @@ class DiscountsController < ApplicationController
   before_action :set_campaign
   before_action :set_discount, only: %i[update destroy]
 
+  
   def create
-    @discount = @campaign.discounts.new(discount_params)
+    @campaign = Campaign.find(params[:campaign_id])
+    @discount = @campaign.discounts.build(discount_params)
+
     if @discount.save
-      record_discount_history("created")
-      redirect_to @campaign, notice: "Desconto aplicado com sucesso."
+      redirect_to @campaign, notice: 'Discount was successfully created.'
     else
-      render 'new'
+      render :new
     end
   end
+
 
   def update
     if @discount.update(discount_params)
@@ -40,8 +43,8 @@ class DiscountsController < ApplicationController
   def discount_params
     params.require(:discount).permit(:discount_type, :discount_value, :status, :campaign_id, :user_id)
   end
-
   def record_discount_history(action)
-    DiscountHistory.create(discount: @discount, user: current_user, action:)
+    DiscountHistory.create(discount: @discount, user: current_user, action: action)
   end
-end
+end 
+  
