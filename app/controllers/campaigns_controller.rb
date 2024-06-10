@@ -4,6 +4,17 @@ class CampaignsController < ApplicationController
 
   def index
     @campaigns = Campaign.includes(:product, :discount).all
+    @campaigns_with_dates = @campaigns.map do |campaign|
+      {
+        campaign: campaign,
+        start_date: campaign.start_date,
+        end_date: campaign.end_date
+      }
+    end
+
+
+
+
   end
 
   def show
@@ -21,7 +32,9 @@ class CampaignsController < ApplicationController
   def create
     @campaign = build_campaign
     @discount = build_discount if discount_params_present?
-
+    @campaign.start_date = params[:campaign][:start_date]
+    @campaign.end_date = params[:campaign][:end_date]
+  
     if save_campaign_and_discount
       register_change(@campaign)
       redirect_to @campaign, notice: 'Campaign created successfully!'
@@ -29,6 +42,7 @@ class CampaignsController < ApplicationController
       render :new
     end
   end
+  
 
   def edit
   end

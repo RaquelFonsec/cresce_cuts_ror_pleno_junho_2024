@@ -79,8 +79,10 @@
                 <th>Preço original</th>
                 <th>Preço com Desconto</th>
                 <th>Status</th>
+                <th>Data de Início</th> <!-- Adicione a coluna para Data de Início -->
+                <th>Data de Término</th> <!-- Adicione a coluna para Data de Término -->
                 <th>Histórico de Descontos</th>
-                <th>Excluir Campanha</th> <!-- Nova coluna para o botão Excluir -->
+                <th>Excluir Campanha</th>
             </tr>
         </thead>
         <tbody>
@@ -99,6 +101,10 @@
                     <td><%= campaign.product.price %></td>
                     <td><%= campaign.discounted_price %></td>
                     <td><%= campaign.calculated_status %></td>
+                    <!-- Exibir as datas de início e término -->
+                    <td><%= campaign.start_date %></td>
+                    <td><%= campaign.end_date %></td>
+                    <!-- Fim da exibição das datas de início e término -->
                     <td>
                         <%= link_to campaign_path(campaign), class: 'link' do %>
                             Ver Histórico
@@ -122,6 +128,4 @@
     </table>
 
     <%= link_to 'Nova Campanha', new_campaign_path, class: "btn btn-success" %>
-    <%= link_to 'Listar Produtos', 'http://localhost:3000/api/products', class: "btn btn-info" %> <!-- Link direto para a URL da API -->
-</body>
-</html>
+    <%= link_to 'Listar Produtos', 'http://localhost:3000/api/products', class: "btn btn-info" %> <!-- Link direto para a URL da

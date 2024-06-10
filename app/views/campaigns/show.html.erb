@@ -26,13 +26,24 @@
     </p>
 
     <p>
-      <strong>Criado Por::</strong>
+      <strong>Criado Por:</strong>
       <%= @user.email %>
     </p>
 
     <p>
       <strong>Data/hora:</strong>
       <%= @created_at.strftime("%d/%m/%Y, %H:%M") %>
+    </p>
+
+    <!-- Adicionando informações de data de início e término -->
+    <p>
+      <strong>Data de Início:</strong>
+      <%= @campaign.start_date.strftime("%d/%m/%Y") %>
+    </p>
+
+    <p>
+      <strong>Data de Término:</strong>
+      <%= @campaign.end_date.strftime("%d/%m/%Y") %>
     </p>
 
     <!-- Link "Voltar" estilizado como sublinhado -->
