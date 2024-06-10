@@ -4,7 +4,8 @@ class Campaign < ApplicationRecord
   has_many :campaign_histories, dependent: :destroy
   has_one :discount, dependent: :destroy
   has_one_attached :image
-  attr_accessor :discount_type
+
+  accepts_nested_attributes_for :discount
 
   validates :start_date, :end_date, :user_id, :product_id, presence: true
   validate :end_date_after_start_date
@@ -13,18 +14,6 @@ class Campaign < ApplicationRecord
   enum status: { ativo: 0, expirado: 1 }
 
   before_create :set_initial_status
-
-  accepts_nested_attributes_for :discount
-
-  def activate
-    update(status: :ativo)
-    register_change(:ativo)
-  end
-
-  def expire
-    update(status: :expirado)
-    register_change(:expirado)
-  end
 
   def original_price
     product.price

@@ -1,8 +1,9 @@
 class Discount < ApplicationRecord
   belongs_to :campaign
-  belongs_to :user, optional: true
+  belongs_to :user, optional: true  # Tornar opcional
 
   enum status: { pending: 0, active: 1, expired: 2 }
+  
   validates :discount_type, presence: true, inclusion: { in: ['De', 'Por'] }
   validates :discount_value, presence: true, numericality: { greater_than: 0 }
   validates :status, inclusion: { in: statuses.keys }
@@ -15,11 +16,11 @@ class Discount < ApplicationRecord
 
     case discount_type
     when 'De'
-      campaign.product.price - discount_value
+      [campaign.product.price - discount_value, 0].max
     when 'Por'
       campaign.product.price * (1 - discount_value.to_f / 100)
     else
-      0
+      campaign.product.price
     end
   end
 

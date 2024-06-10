@@ -66,6 +66,9 @@
         .actions button:hover {
             color: #00f;
         }
+        .status-icon {
+            margin-right: 8px;
+        }
     </style>
 </head>
 <body>
@@ -98,7 +101,16 @@
                     </td>
                     <td><%= campaign.product.price %></td>
                     <td><%= campaign.discounted_price %></td>
-                    <td><%= campaign.calculated_status %></td>
+                    <td>
+                        <% if campaign.status == 'ativo' %>
+                            <i class="fas fa-check-circle status-icon" style="color: green;"></i>
+                        <% elsif campaign.status == 'agendado' %>
+                            <i class="fas fa-clock status-icon" style="color: orange;"></i>
+                        <% else %>
+                            <i class="fas fa-times-circle status-icon" style="color: red;"></i>
+                        <% end %>
+                        <%= campaign.calculated_status %>
+                    </td>
                     <!-- Exibir as datas de início e término -->
                     <td><%= campaign.start_date %></td>
                     <td><%= campaign.end_date %></td>
