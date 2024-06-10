@@ -84,4 +84,9 @@ class CampaignsController < ApplicationController
   def register_change(campaign)
     campaign.campaign_histories.create(user_id: campaign.user_id, status: campaign.status, data_hora: Time.current)
   end
+
+def discount_history
+  @campaign = Campaign.find(params[:id])
+  @discount_history = @campaign.discount_histories.order(occurred_at: :desc)
+  end
 end

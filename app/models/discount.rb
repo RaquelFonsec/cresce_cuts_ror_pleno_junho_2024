@@ -1,3 +1,4 @@
+# app/models/discount.rb
 class Discount < ApplicationRecord
   belongs_to :campaign
   belongs_to :user, optional: true
@@ -7,19 +8,7 @@ class Discount < ApplicationRecord
   validates :discount_value, presence: true, numericality: { greater_than: 0 }
   validates :status, inclusion: { in: statuses.keys }
 
-  before_validation :set_default_status, on: :create
-  before_create :set_applied_info
-
-  def set_default_status
-    self.status ||= :active
-  end
-
-  def set_applied_info
-    return unless user.present?
-
-    self.applied_by = user.id
-    self.applied_at = Time.current
-  end
+  before_validation :set_default_status
 
   def discount_price
     return 0 unless campaign&.product
@@ -28,9 +17,15 @@ class Discount < ApplicationRecord
     when 'De'
       campaign.product.price - discount_value
     when 'Por'
-      campaign.product.price * (1 - (discount_value.to_f / 100.0))
+      campaign.product.price * (1 - discount_value.to_f / 100)
     else
       0
     end
+  end
+
+  private
+
+  def set_default_status
+    self.status ||= :active
   end
 end

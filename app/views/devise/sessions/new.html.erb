@@ -1,39 +1,59 @@
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-body">
-          <h2 class="text-center mb-4">Log in</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Título da Página</title>
+    <style>
+        body {
+            background-color: #fff; 
+        }
+        .form-bg {
+            background-color: #d3d0e0; 
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body form-bg"> <!-- Aplica o estilo do fundo lilás ao formulário -->
+                        <h2 class="text-center mb-4">Log in</h2>
 
-          <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-            <div class="mb-3">
-              <%= f.input :email,
-                          required: false,
-                          autofocus: true,
-                          input_html: { class: "form-control", autocomplete: "email", placeholder: "Email" } %>
+                        <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+                            <div class="mb-3">
+                                <%= f.input :email,
+                                            required: false,
+                                            autofocus: true,
+                                            input_html: { class: "form-control", autocomplete: "email", placeholder: "Email" } %>
+                            </div>
+
+                            <div class="mb-3">
+                                <%= f.input :password,
+                                            required: false,
+                                            input_html: { class: "form-control", autocomplete: "current-password", placeholder: "Password" } %>
+                            </div>
+
+                            <% if devise_mapping.rememberable? %>
+                                <div class="mb-3 form-check">
+                                    <%= f.input :remember_me, as: :boolean, label: "Remember me", input_html: { class: "form-check-input" } %>
+                                    <%= f.label :remember_me, class: "form-check-label" %>
+                                </div>
+                            <% end %>
+
+                            <div class="d-grid">
+                                <%= f.button :submit, "Log in", class: "btn btn-primary btn-block" %>
+                            </div>
+                        <% end %>
+
+                        <%= render "devise/shared/links" %>
+                    </div>
+                </div>
             </div>
-
-            <div class="mb-3">
-              <%= f.input :password,
-                          required: false,
-                          input_html: { class: "form-control", autocomplete: "current-password", placeholder: "Password" } %>
-            </div>
-
-            <% if devise_mapping.rememberable? %>
-              <div class="mb-3 form-check">
-                <%= f.input :remember_me, as: :boolean, label: "Remember me", input_html: { class: "form-check-input" } %>
-                <%= f.label :remember_me, class: "form-check-label" %>
-              </div>
-            <% end %>
-
-            <div class="d-grid">
-              <%= f.button :submit, "Log in", class: "btn btn-primary btn-block" %>
-            </div>
-          <% end %>
-
-          <%= render "devise/shared/links" %>
         </div>
-      </div>
     </div>
-  </div>
-</div>
+</body>
+</html>

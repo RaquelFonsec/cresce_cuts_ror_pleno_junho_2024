@@ -1,4 +1,4 @@
-<h1>Detalhes da Campanha</h1>
+<h1>Histórico de Descontos</h1>
 
 <div class="row">
   <div class="col-md-4">
@@ -10,16 +10,6 @@
   </div>
 
   <div class="col-md-8">
-    <p>
-      <strong>Produto:</strong>
-      <%= @campaign.title %>
-    </p>
-
-    <p>
-      <strong>Descriçao:</strong>
-      <%= @campaign.description %>
-    </p>
-
     <p>
       <strong>Preço original:</strong>
       <%= @original_price %>
@@ -45,13 +35,7 @@
       <%= @created_at.strftime("%d/%m/%Y, %H:%M") %>
     </p>
 
-    <%= link_to 'Edit', edit_campaign_path(@campaign), class: "btn btn-primary" %>
-
-    <!-- Formulário para excluir a campanha -->
-    <%= form_for @campaign, method: :delete, html: { class: "d-inline" } do |f| %>
-      <%= f.submit 'Delete', data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
-    <% end %>
-
-    <%= link_to 'Back', campaigns_path, class: "btn btn-secondary" %>
+    <!-- Link "Voltar" estilizado como sublinhado -->
+    <%= link_to 'Voltar', campaigns_path, class: "link" %>
   </div>
 </div>

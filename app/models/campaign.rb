@@ -1,19 +1,13 @@
+
 class Campaign < ApplicationRecord
   belongs_to :user
   belongs_to :product
   has_many :campaign_histories, dependent: :destroy
-  has_many :discounts
   has_one :discount, dependent: :destroy
   has_one_attached :image
   attr_accessor :discount_type
-  validates :title, presence: true
-  validates :description, presence: true
-  validates :start_date, presence: true
-  validates :end_date, presence: true
-  validates :user_id, presence: true
-  validates :product_id, presence: true
 
-  validate :calculate_discounted_price
+  validates :title, :description, :start_date, :end_date, :user_id, :product_id, presence: true
   validate :end_date_after_start_date
 
   enum status: { ativo: 0, expirado: 1 }
@@ -23,12 +17,12 @@ class Campaign < ApplicationRecord
 
   def activate
     update(status: :ativo)
-    register_change
+    register_change(:ativo)
   end
 
   def expire
     update(status: :expirado)
-    register_change
+    register_change(:expirado)
   end
 
   def original_price
@@ -36,16 +30,18 @@ class Campaign < ApplicationRecord
   end
 
   def discounted_price
-    discount.present? ? discount.discount_price : product.price
+    discount&.discount_price || product.price
   end
 
   def calculated_status
-    if start_date > Date.current
+    if status == 'ativo'
+      'Ativo'
+    elsif start_date.future?
       'Agendado'
-    elsif end_date < Date.current
+    elsif end_date.past?
       'Expirado'
     else
-      'Ativo'
+      'Ativo'  # Se estiver dentro do intervalo de datas, mas com status diferente de ativo, consideramos como ativo
     end
   end
 
@@ -55,14 +51,8 @@ class Campaign < ApplicationRecord
     self.status ||= :ativo
   end
 
-  def calculate_discounted_price
-    return unless discount.present? && discounted_price.nil?
-
-    errors.add(:discounted_price, "can't be nil when a discount is present")
-  end
-
-  def register_change
-    campaign_histories.create(user_id:, status:, data_hora: Time.current)
+  def register_change(new_status)
+    campaign_histories.create(user_id: user_id, status: new_status, data_hora: Time.current)
   end
 
   def end_date_after_start_date
