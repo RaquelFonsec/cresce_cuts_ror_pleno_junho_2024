@@ -1,5 +1,3 @@
-<h1 class="text-center mb-4">New Campaign</h1>
-
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-6">
@@ -7,50 +5,34 @@
         <div class="card-body">
           <%= form_with(model: @campaign, local: true, html: { class: "row g-3 text-dark" }, multipart: true) do |form| %>
             <div class="mb-3">
-              <%= form.label :title, "Title", class: "form-label text-primary" %>
-              <%= form.text_field :title, class: "form-control form-control-sm" %>
+              <%= form.label :product_id, "Product", class: "form-label text-primary" %>
+              <%= form.collection_select :product_id, @products, :id, :name, { prompt: "Select a product" }, { class: "form-select form-select-sm" } %>
             </div>
-
-            <div class="mb-3">
-              <%= form.label :description, "Description", class: "form-label text-primary" %>
-              <%= form.text_area :description, class: "form-control form-control-sm", rows: 3 %>
-            </div>
-
             <div class="row g-3">
               <div class="col-6">
                 <%= form.label :start_date, "Start Date", class: "form-label text-primary" %>
                 <%= form.date_field :start_date, class: "form-control form-control-sm" %>
               </div>
-
               <div class="col-6">
                 <%= form.label :end_date, "End Date", class: "form-label text-primary" %>
                 <%= form.date_field :end_date, class: "form-control form-control-sm" %>
               </div>
             </div>
-
-            <div class="mb-3">
-              <%= form.label :product_id, "Product", class: "form-label text-primary" %>
-              <%= form.collection_select :product_id, @products, :id, :name, { prompt: "Select a product" }, { class: "form-select form-select-sm" } %>
-            </div>
-
             <div class="mb-3">
               <%= form.label :status, "Status", class: "form-label text-primary" %>
               <%= form.select :status, Campaign.statuses.keys.map { |status| [status.humanize, status] }, { prompt: "Select a status" }, { class: "form-select form-select-sm" } %>
             </div>
-
             <div class="mb-3">
               <%= form.label :image, "Upload Image", class: "form-label text-primary" %>
               <%= form.file_field :image, class: "form-control form-control-sm" %>
             </div>
-
             <div class="row g-3">
               <div class="col-6">
                 <%= form.fields_for :discount, @campaign.discount || @campaign.build_discount do |discount_form| %>
                   <div class="mb-3">
                     <%= discount_form.label :discount_type, "Discount Type", class: "form-label text-primary" %>
-                    <%= discount_form.select :discount_type, [['De', 'De'], ['Por', 'Por']], { prompt: "Select a discount type" }, class: "form-select form-select-sm" %>
+                    <%= discount_form.select :discount_type, [['De', 'De'], ['Por', 'Por']], { prompt: "Select a discount type" }, { class: "form-select form-select-sm" } %>
                   </div>
-
                   <div class="mb-3">
                     <%= discount_form.label :discount_value, "Discount Value", class: "form-label text-primary" %>
                     <%= discount_form.number_field :discount_value, class: "form-control form-control-sm" %>
@@ -58,10 +40,8 @@
                 <% end %>
               </div>
             </div>
-
             <%= form.submit "Create Campaign", class: "btn btn-primary btn-block btn-sm" %>
           <% end %>
-          
           <%= link_to 'Back', campaigns_path, class: "btn btn-secondary btn-block btn-sm mt-3" %>
         </div>
       </div>

@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
-  # Routes for campaigns and their discounts
-
-  get '/api/products', to: 'products#index_api'
  
+
+  namespace :api do
+    resources :products, only: [:index]
+  end
+
   resources :campaigns do
     resources :discounts, only: [:new, :create]
     get 'discount_history', to: 'campaigns#discount_history', on: :member
@@ -11,9 +13,8 @@ Rails.application.routes.draw do
     end
   end
 
-  # Route for user authentication with Devise
+
   devise_for :users
 
-  # Root route
   root to: 'pages#home'
 end

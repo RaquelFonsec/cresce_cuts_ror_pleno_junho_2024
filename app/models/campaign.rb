@@ -1,19 +1,19 @@
-
 class Campaign < ApplicationRecord
   belongs_to :user
   belongs_to :product
   has_many :campaign_histories, dependent: :destroy
-  has_many :discounts
   has_one :discount, dependent: :destroy
   has_one_attached :image
   attr_accessor :discount_type
 
-  validates :title, :description, :start_date, :end_date, :user_id, :product_id, presence: true
+  validates :start_date, :end_date, :user_id, :product_id, presence: true
   validate :end_date_after_start_date
+  validate :product_name_presence  
 
   enum status: { ativo: 0, expirado: 1 }
 
   before_create :set_initial_status
+
   accepts_nested_attributes_for :discount
 
   def activate
@@ -42,7 +42,7 @@ class Campaign < ApplicationRecord
     elsif end_date.past?
       'Expirado'
     else
-      'Ativo'  # Se estiver dentro do intervalo de datas, mas com status diferente de ativo, consideramos como ativo
+      'Ativo'  
     end
   end
 
@@ -60,5 +60,9 @@ class Campaign < ApplicationRecord
     return if end_date.blank? || start_date.blank?
 
     errors.add(:end_date, 'must be after start date') if end_date < start_date
+  end
+
+  def product_name_presence
+    errors.add(:product_id, 'product name must be present') if product.name.blank?
   end
 end
