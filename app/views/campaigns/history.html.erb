@@ -1,0 +1,18 @@
+
+<h1>Histórico de Descontos</h1>
+
+<div class="row">
+  <div class="col-md-4">
+    <% if @campaign.image.attached? %>
+      <%= image_tag url_for(@campaign.image), class: "img-thumbnail" %>
+    <% else %>
+      <p>No image available</p>
+    <% end %>
+  </div>
+
+  <div class="col-md-8">
+    <%= render partial: 'campaigns/campaign_details', locals: { campaign: @campaign } %>
+  </div>
+</div>
+
+<%= link_to 'Voltar', campaigns_path, class: "link" %>

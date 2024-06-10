@@ -1,52 +1,19 @@
-<h1>Histórico de Descontos</h1>
 
-<div class="row">
-  <div class="col-md-4">
-    <% if @campaign.image.attached? %>
-      <%= image_tag url_for(@campaign.image), class: "img-thumbnail" %>
-    <% else %>
-      <p>No image available</p>
-    <% end %>
-  </div>
+<h1>Detalhes da Campanha</h1>
 
-  <div class="col-md-8">
-    <p>
-      <strong>Preço original:</strong>
-      <%= @original_price %>
-    </p>
+<%= render partial: 'campaigns/campaign_details', locals: { campaign: @campaign } %>
 
-    <p>
-      <strong>Preço com Desconto:</strong>
-      <%= @discounted_price %>
-    </p>
+<!-- Histórico de Descontos -->
+<h2>Histórico de Descontos</h2>
+<ul>
+  <% @campaign.discounts.each do |discount| %>
+    <li>
+      <strong>Data/Hora:</strong> <%= discount.created_at.strftime("%d/%m/%Y, %H:%M") %><br>
+      <strong>Usuário:</strong> <%= discount.user.email %><br>
+      <strong>Tipo de Desconto:</strong> <%= discount.discount_type %><br>
+      <strong>Valor do Desconto:</strong> <%= discount.discount_value %><br>
+    </li>
+  <% end %>
+</ul>
 
-    <p>
-      <strong>Status:</strong>
-      <%= @status %>
-    </p>
-
-    <p>
-      <strong>Criado Por:</strong>
-      <%= @user.email %>
-    </p>
-
-    <p>
-      <strong>Data/hora:</strong>
-      <%= @created_at.strftime("%d/%m/%Y, %H:%M") %>
-    </p>
-
-    <!-- Adicionando informações de data de início e término -->
-    <p>
-      <strong>Data de Início:</strong>
-      <%= @campaign.start_date.strftime("%d/%m/%Y") %>
-    </p>
-
-    <p>
-      <strong>Data de Término:</strong>
-      <%= @campaign.end_date.strftime("%d/%m/%Y") %>
-    </p>
-
-    <!-- Link "Voltar" estilizado como sublinhado -->
-    <%= link_to 'Voltar', campaigns_path, class: "link" %>
-  </div>
-</div>
+<%= link_to 'Voltar', campaigns_path, class: "link" %>

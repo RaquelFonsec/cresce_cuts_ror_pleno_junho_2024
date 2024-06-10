@@ -1,0 +1,11 @@
+
+<p><strong>Título:</strong> <%= campaign.title %></p>
+<p><strong>Descrição:</strong> <%= campaign.description %></p>
+<p><strong>Data de Início:</strong> <%= campaign.start_date %></p>
+<p><strong>Data de Término:</strong> <%= campaign.end_date %></p>
+<p><strong>Produto:</strong> <%= campaign.product.name %></p>
+<p><strong>Status:</strong> <%= campaign.status %></p>
+<% if campaign.discount.present? %>
+  <p><strong>Tipo de Desconto:</strong> <%= campaign.discount.discount_type %></p>
+  <p><strong>Valor do Desconto:</strong> <%= campaign.discount.discount_value %></p>
+<% end %>
