@@ -1,11 +1,11 @@
 class Discount < ApplicationRecord
   belongs_to :campaign
-  belongs_to :user, optional: true  # Tornar opcional
+  belongs_to :user
 
   enum status: { pending: 0, active: 1, expired: 2 }
-  
-  validates :discount_type, presence: true, inclusion: { in: ['De', 'Por'] }
-  validates :discount_value, presence: true, numericality: { greater_than: 0 }
+  enum discount_type: { fixed: 'fixed', percentage: 'percentage' }
+  validates :discount_type, inclusion: { in: %w[fixed percentage] }
+  validates :discount_value, :status, presence: true
   validates :status, inclusion: { in: statuses.keys }
 
   before_validation :set_default_status

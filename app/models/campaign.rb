@@ -1,19 +1,20 @@
 class Campaign < ApplicationRecord
   belongs_to :user
   belongs_to :product
-  has_many :campaign_histories, dependent: :destroy
   has_one :discount, dependent: :destroy
+  has_many :discounts, dependent: :destroy
+  has_many :campaign_histories, dependent: :destroy
+  has_one :discount
   has_one_attached :image
 
-  accepts_nested_attributes_for :discount
-
-  validates :start_date, :end_date, :user_id, :product_id, presence: true
+  accepts_nested_attributes_for :discounts, allow_destroy: true
+  validates :start_date, :end_date, :product_id, :status, presence: true
   validate :end_date_after_start_date
-  validate :product_name_presence  
-
+  
   enum status: { ativo: 0, expirado: 1 }
 
   before_create :set_initial_status
+  before_destroy :destroy_campaign_histories
 
   def original_price
     product.price
@@ -52,6 +53,11 @@ class Campaign < ApplicationRecord
   end
 
   def product_name_presence
-    errors.add(:product_id, 'product name must be present') if product.name.blank?
+    return unless product.blank?  
+    errors.add(:product_id, 'product must be present')
   end
-end
+
+  def destroy_campaign_histories
+    campaign_histories.destroy_all
+  end
+end 
