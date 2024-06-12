@@ -10,8 +10,8 @@ class Campaign < ApplicationRecord
   accepts_nested_attributes_for :discounts, allow_destroy: true
   validates :start_date, :end_date, :product_id, :status, presence: true
   validate :end_date_after_start_date
-  
-  enum status: { ativo: 0, expirado: 1 }
+  enum status: { ativo: 0, expirado: 1,}
+ 
 
   before_create :set_initial_status
   before_destroy :destroy_campaign_histories

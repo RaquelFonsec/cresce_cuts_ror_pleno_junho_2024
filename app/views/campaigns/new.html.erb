@@ -8,6 +8,10 @@
               <%= form.label :product_id, "Product", class: "form-label text-primary" %>
               <%= form.collection_select :product_id, @products, :id, :name, { prompt: "Select a product" }, { class: "form-select form-select-sm" } %>
             </div>
+            <div class="mb-3">
+              <%= form.label :description, "Description", class: "form-label text-primary" %>
+              <%= form.text_area :description, class: "form-control form-control-sm", placeholder: "Enter description" %>
+            </div>
             <div class="row g-3">
               <div class="col-6">
                 <%= form.label :start_date, "Start Date", class: "form-label text-primary" %>
@@ -40,9 +44,9 @@
                 <% end %>
               </div>
             </div>
-            <%= form.submit "Create Campaign", class: "btn btn-primary btn-block btn-sm" %>
+            <%= form.submit "Salvar alterações", class: "btn btn-primary btn-block btn-sm" %>
           <% end %>
-          <%= link_to 'Back', campaigns_path, class: "btn btn-secondary btn-block btn-sm mt-3" %>
+          <%= link_to 'Voltar às campanhas', campaigns_path, class: "btn btn-secondary btn-block btn-sm mt-3" %>
         </div>
       </div>
     </div>

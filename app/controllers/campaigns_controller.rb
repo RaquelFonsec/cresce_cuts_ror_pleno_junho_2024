@@ -4,7 +4,7 @@ class CampaignsController < ApplicationController
   before_action :load_products, only: %i[new edit create update]
 
   def index
-    @campaigns = Campaign.includes(:product, :discount).all
+    @campaigns = Campaign.all
   end
 
   def show
@@ -27,18 +27,20 @@ class CampaignsController < ApplicationController
       render :new
     end
   end
-
   def edit
+    @campaign = Campaign.find(params[:id])
+    @products = Product.all
   end
+  
 
   def update
     @campaign = Campaign.find(params[:id])
-    
+    puts "Status recebido: #{campaign_params[:status]}" 
     if valid_status?(campaign_params[:status])
-      if @campaign.update(campaign_params)
+      if @campaign.update(campaign_params.except(:original_price))
         redirect_to campaign_path(@campaign), notice: 'Campaign updated successfully!'
       else
-        flash[:alert] = @campaign.errors.full_messages.join(', ')
+        logger.error "Error updating campaign: #{@campaign.errors}"
         render :edit
       end
     else
@@ -46,7 +48,11 @@ class CampaignsController < ApplicationController
       render :edit
     end
   end
-
+  
+  
+  
+  
+  
   def destroy
     @campaign.destroy
     redirect_to campaigns_path, notice: 'Campaign was successfully deleted.'
@@ -55,8 +61,10 @@ class CampaignsController < ApplicationController
   private
 
   def valid_status?(status)
-    ['ativo', 'inativo'].include?(status)
+    Campaign.statuses.key?(status)
   end
+  
+  
 
   def set_campaign
     @campaign = Campaign.find(params[:id])
@@ -66,8 +74,11 @@ class CampaignsController < ApplicationController
     @products = Product.all
   end
   def campaign_params
-    params.require(:campaign).permit(:start_date, :end_date, :product_id, :status, discounts_attributes: [:id, :discount_type, :discount_value, :status, :_destroy, :user_id])
+    params.require(:campaign).permit(:product_id, :description, :original_price, :discounted_price, :start_date, :end_date, :image, :status)
   end
+  
+  
+  
   
 
   def register_change(campaign)
