@@ -6,8 +6,8 @@ class Campaign < ApplicationRecord
   has_many :campaign_histories, dependent: :destroy
   has_one :discount
   has_one_attached :image
-
-  accepts_nested_attributes_for :discounts, allow_destroy: true
+  accepts_nested_attributes_for :discount
+ 
   validates :start_date, :end_date, :product_id, :status, presence: true
   validate :end_date_after_start_date
   enum status: { ativo: 0, expirado: 1,}
@@ -21,9 +21,9 @@ class Campaign < ApplicationRecord
   end
 
   def discounted_price
-    discount&.discount_price || product.price
+    return product.price unless discount.present?
+    discount.discount_price
   end
-
   def calculated_status
     if status == 'ativo'
       'Ativo'

@@ -1,3 +1,4 @@
+
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-6">
@@ -35,7 +36,7 @@
                 <%= form.fields_for :discount, @campaign.discount || @campaign.build_discount do |discount_form| %>
                   <div class="mb-3">
                     <%= discount_form.label :discount_type, "Discount Type", class: "form-label text-primary" %>
-                    <%= discount_form.select :discount_type, [['De', 'De'], ['Por', 'Por']], { prompt: "Select a discount type" }, { class: "form-select form-select-sm" } %>
+                    <%= discount_form.select :discount_type, [['Percentual', 'percentual'], ['Valor Fixo', 'valor_fixo']], { prompt: "Select a discount type" }, { class: "form-select form-select-sm" } %>
                   </div>
                   <div class="mb-3">
                     <%= discount_form.label :discount_value, "Discount Value", class: "form-label text-primary" %>

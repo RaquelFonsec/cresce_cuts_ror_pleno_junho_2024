@@ -1,3 +1,4 @@
+
 class CampaignsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_campaign, only: %i[show edit update destroy]
@@ -13,46 +14,43 @@ class CampaignsController < ApplicationController
     @created_at = @campaign.created_at
     @discounted_price = @campaign.discounted_price
     @status = @campaign.calculated_status
+    @discount = @campaign.discount
+    @campaign_histories = @campaign.campaign_histories
   end
 
   def new
     @campaign = Campaign.new
   end
-
+  
   def create
     @campaign = current_user.campaigns.build(campaign_params)
+    @campaign.discount.user = current_user # Associando o usuário atual ao desconto
     if @campaign.save
       redirect_to campaigns_path, notice: 'Campaign created successfully!'
     else
       render :new
     end
   end
+  
+  
+  
   def edit
     @campaign = Campaign.find(params[:id])
     @products = Product.all
   end
-  
 
   def update
     @campaign = Campaign.find(params[:id])
-    puts "Status recebido: #{campaign_params[:status]}" 
-    if valid_status?(campaign_params[:status])
-      if @campaign.update(campaign_params.except(:original_price))
-        redirect_to campaign_path(@campaign), notice: 'Campaign updated successfully!'
-      else
-        logger.error "Error updating campaign: #{@campaign.errors}"
-        render :edit
-      end
+    if @campaign.update(campaign_params.except(:original_price))
+      redirect_to campaign_path(@campaign), notice: 'Campaign updated successfully!'
     else
-      flash[:alert] = 'Invalid campaign status'
+      logger.error "Error updating campaign: #{@campaign.errors}"
       render :edit
     end
   end
-  
-  
-  
-  
-  
+
+ 
+
   def destroy
     @campaign.destroy
     redirect_to campaigns_path, notice: 'Campaign was successfully deleted.'
@@ -63,8 +61,6 @@ class CampaignsController < ApplicationController
   def valid_status?(status)
     Campaign.statuses.key?(status)
   end
-  
-  
 
   def set_campaign
     @campaign = Campaign.find(params[:id])
@@ -74,14 +70,15 @@ class CampaignsController < ApplicationController
     @products = Product.all
   end
   def campaign_params
-    params.require(:campaign).permit(:product_id, :description, :original_price, :discounted_price, :start_date, :end_date, :image, :status)
-  end
+    params.require(:campaign).permit(
+      :product_id, 
+      :description, 
+      :start_date, 
+      :end_date, 
+      :status, 
+      :image,
+      discount_attributes: [:id, :discount_type, :discount_value]
+    )
   
-  
-  
-  
-
-  def register_change(campaign)
-    campaign.campaign_histories.create(user_id: campaign.user_id, status: campaign.status, data_hora: Time.current)
-  end
-end
+  end 
+end 

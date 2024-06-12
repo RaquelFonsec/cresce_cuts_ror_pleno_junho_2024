@@ -1,4 +1,4 @@
-
+<!-- app/views/campaigns/show.html.erb -->
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-6">
@@ -18,13 +18,16 @@
             </li>
           </ul>
 
-          <% if @campaign.discount %>
+          <% if @discount %>
             <h2>Histórico de Desconto</h2>
             <ul>
-              <li>
-                <strong>Data/Hora:</strong> <%= @campaign.discount.created_at.strftime("%d/%m/%Y, %H:%M") %><br>
-                <strong>Usuário:</strong> <%= @campaign.discount.user.email %><br>
-              </li>
+              <% @campaign_histories.each do |history| %>
+                <li>
+                  <strong>Data/Hora:</strong> <%= history.data_hora.strftime("%d/%m/%Y, %H:%M") %><br>
+                  <strong>Descrição da Mudança:</strong> <%= history.change_description %><br>
+                  <strong>Usuário:</strong> <%= history.user.email %><br>
+                </li>
+              <% end %>
             </ul>
           <% end %>
 
@@ -35,3 +38,4 @@
     </div>
   </div>
 </div>
+

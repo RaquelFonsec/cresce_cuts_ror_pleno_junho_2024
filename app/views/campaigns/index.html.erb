@@ -11,17 +11,20 @@
             color: white;
             font-family: Arial, sans-serif;
         }
+
         table {
-            background-color: #f2f2f2; /* Cor de fundo gelo */
+            background-color: #f2f2f2;
             color: black;
             width: 100%;
             border-collapse: collapse;
         }
+
         th, td {
-            border: 1px solid white;
+            border: 1px white solid;
             padding: 8px;
             text-align: left;
         }
+
         .btn {
             background-color: #333;
             color: white;
@@ -30,20 +33,25 @@
             border: none;
             cursor: pointer;
         }
+
         .btn:hover {
             background-color: #555;
         }
+
         .link {
             color: blue;
             text-decoration: underline;
         }
+
         .link:hover {
             color: #00f;
         }
+
         .status-icon {
             margin-right: 8px;
         }
-        .actions button {
+
+        .actions {
             background: none;
             border: none;
             padding: 0;
@@ -51,17 +59,18 @@
             text-decoration: underline;
             cursor: pointer;
         }
-        .actions button i {
+
+        .actions i {
             margin-right: 4px;
         }
-        .actions button:hover {
+
+        .actions:hover {
             color: #00f;
         }
     </style>
 </head>
 <body>
     <h1>Todas Campanhas</h1>
-
     <table>
         <thead>
             <tr>
@@ -70,58 +79,57 @@
                 <th>Preço original</th>
                 <th>Preço com Desconto</th>
                 <th>Status</th>
-                <th>Data de Início</th> 
-                <th>Data de Término</th> 
+                <th>Dados de Início</th>
+                <th>Dados de Término</th>
                 <th>Ações</th>
             </tr>
         </thead>
         <tbody>
             <% @campaigns.each do |campaign| %>
-                <tr>
-                    <td>
-                        <% if campaign.image.attached? %>
-                            <%= image_tag campaign.image, class: "img-thumbnail", style: "max-width: 100px; max-height: 100px;" %>
-                        <% else %>
-                            No Image
-                        <% end %>
-                        <br>
-                        <%= campaign.product.name %>
-                    </td>
-                    <td><%= campaign.description %></td>
-                    <td><%= campaign.product.price %></td>
-                    <td><%= campaign.discounted_price %></td>
-                    <td>
-                        <% if campaign.status == 'ativo' %>
-                            <i class="fas fa-check-circle status-icon" style="color: green;"></i>
-                        <% elsif campaign.status == 'agendado' %>
-                            <i class="fas fa-clock status-icon" style="color: orange;"></i>
-                        <% else %>
-                            <i class="fas fa-times-circle status-icon" style="color: red;"></i>
-                        <% end %>
-                        <%= campaign.calculated_status %>
-                    </td>
-                    <td><%= campaign.start_date %></td>
-                    <td><%= campaign.end_date %></td>
-                    <td class="actions">
-                        <%= link_to campaign_path(campaign), class: 'link' do %>
-                            <i class="fas fa-history"></i>
-                        <% end %>
-                        <%= link_to edit_campaign_path(campaign), class: 'link' do %>
-                            <i class="fas fa-pen"></i>
-                        <% end %>
-                        <form action="<%= campaign_path(campaign) %>" method="post" style="display: inline;">
-                            <%= csrf_meta_tags %>
-                            <%= hidden_field_tag :_method, :delete %>
-                            <button type="submit" data-confirm="Tem certeza que deseja excluir esta campanha?" class="link">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </form>
-                    </td>
-                </tr>
+            <tr>
+                <td>
+                    <% if campaign.image.attached? %>
+                    <%= image_tag campaign.image, class: "img-thumbnail", style: "max-width: 100px; max-height: 100px;" %>
+                    <% else %>
+                    Sem imagem
+                    <% end %>
+                    <br>
+                    <%= campaign.product.name %>
+                </td>
+                <td><%= campaign.description %></td>
+                <td><%= number_to_currency(campaign.product.price) %></td>
+                <td><%= number_to_currency(campaign.discounted_price) %></td>
+                <td>
+                    <% if campaign.status == 'ativo' %>
+                    <i class="fas fa-check-circle status-icon" style="color: green;"></i>
+                    <% elsif campaign.status == 'agendado' %>
+                    <i class="fas fa-clock status-icon" style="color: orange;"></i>
+                    <% else %>
+                    <i class="fas fa-times-circle status-icon" style="color: red;"></i>
+                    <% end %>
+                    <%= campaign.calculated_status %>
+                </td>
+                <td><%= campaign.start_date.strftime("%d/%m/%Y") %></td>
+                <td><%= campaign.end_date.strftime("%d/%m/%Y") %></td>
+                <td class="actions">
+                    <%= link_to campaign_path(campaign), class: 'link' do %>
+                    <i class="fas fa-history"></i>
+                    <% end %>
+                    <%= link_to edit_campaign_path(campaign), class:'link' do %>
+                    <i class="fas fa-pen"></i>
+                    <% end %>
+                    <form action="<%= campaign_path(campaign) %>" method="post" style="display: inline;">
+                        <%= csrf_meta_tags %>
+                        <%= hidden_field_tag :_method, :delete %>
+                        <button type="submit" data-confirm="Tem certeza de que deseja excluir esta campanha?" class="link">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
             <% end %>
         </tbody>
     </table>
-
     <%= link_to 'Nova Campanha', new_campaign_path, class: "btn btn-success" %>
 </body>
 </html>
