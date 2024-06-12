@@ -6,9 +6,9 @@
       <div id="error_explanation" class="alert alert-danger">
         <h2><%= pluralize(@campaign.errors.count, "error") %> prohibited this campaign from being saved:</h2>
         <ul>
-        <% @campaign.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
+          <% @campaign.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
         </ul>
       </div>
     <% end %>
@@ -54,12 +54,12 @@
 
     <div class="form-group">
       <%= f.label :status, "Status", class: "form-label" %>
-      <%= f.select :status, Campaign.statuses.keys.map { |status| [status.titleize, status] }, { prompt: "Selecione o status" }, class: "form-control" %>
+      <%= f.select :status, Campaign.statuses.keys.map { |status| [status.titleize, status] }, { prompt: "Select status" }, class: "form-control" %>
     </div>
 
     <div class="form-group">
-      <%= f.submit "Salvar alterações", class: "btn btn-primary" %>
-      <%= link_to 'Voltar às campanhas', campaigns_path, class: "btn btn-secondary" %>
+      <%= f.submit "Save Changes", class: "btn btn-primary mr-2" %>
+      <%= link_to 'Back to Campaigns', campaigns_path, class: "btn btn-secondary" %>
     </div>
   <% end %>
 </div>
