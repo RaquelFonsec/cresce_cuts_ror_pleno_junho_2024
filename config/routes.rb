@@ -1,11 +1,8 @@
-
 Rails.application.routes.draw do
-
   namespace :api do
     resources :products, only: [:index]
   end
 
- 
   resources :products, only: [:index] do
     collection do
       get 'index_api'

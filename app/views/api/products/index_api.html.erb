@@ -1,0 +1,13 @@
+<!-- app/views/products/index_api.html.erb -->
+<h1>Produtos</h1>
+
+<ul>
+  <% @products.each do |product| %>
+    <li>
+      <h2><%= product['title'] %></h2>
+      <p><%= product['description'] %></p>
+      <p>Preço: <%= number_to_currency(product['price']) %></p>
+      <!-- Adicione outros atributos conforme necessário -->
+    </li>
+  <% end %>
+</ul>
