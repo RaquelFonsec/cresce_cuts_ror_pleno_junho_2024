@@ -1,11 +1,12 @@
-
 class Api::ProductsController < ApplicationController
-    # GET /api/products
-    def index
-      @products = Product.all
-      render json: @products
+end
+
+module Api
+    class ProductsController < ApplicationController
+      def index
+        @products = Product.all  
+        render json: @products
+      end
     end
-  
-    # Outras ações do controlador
   end
   

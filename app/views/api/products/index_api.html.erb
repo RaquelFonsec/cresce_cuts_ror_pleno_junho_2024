@@ -1,13 +1,13 @@
-<!-- app/views/products/index_api.html.erb -->
-<h1>Produtos</h1>
-
+<!-- app/views/api/products/index_api.html.erb -->
 <ul>
   <% @products.each do |product| %>
     <li>
-      <h2><%= product['title'] %></h2>
+      <h2><%= product['name'] %></h2>
+      <% if product['image'].present? %>
+        <%= image_tag product['image'], class: 'product-image' %>
+      <% end %>
       <p><%= product['description'] %></p>
-      <p>Preço: <%= number_to_currency(product['price']) %></p>
-      <!-- Adicione outros atributos conforme necessário -->
+      <p><strong>Price:</strong> <%= number_to_currency(product['price']) %></p>
     </li>
   <% end %>
 </ul>
