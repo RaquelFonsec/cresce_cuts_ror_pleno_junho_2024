@@ -1,29 +1,31 @@
+
 <!-- app/views/campaigns/show.html.erb -->
 <div class="container mt-5">
   <div class="row justify-content-center">
-    <div class="col-md-6">
+    <div class="col-md-8">
       <div class="card bg-light">
         <div class="card-body">
           <h2>Detalhes da Campanha</h2>
           <ul>
             <li>
-              <strong>Produto:</strong> <%= @product.name %><br>
-              <strong>Data de Início:</strong> <%= @campaign.start_date.strftime("%d/%m/%Y") %><br>
-              <strong>Data de Término:</strong> <%= @campaign.end_date.strftime("%d/%m/%Y") %><br>
-              <strong>Preço Original:</strong> <%= number_to_currency(@product.price) %><br>
-              <strong>Preço com Desconto:</strong> <%= number_to_currency(@discounted_price) %><br>
-              <strong>Status:</strong> <%= @status %><br>
-              <strong>Criado por:</strong> <%= @user.email %><br>
-              <strong>Data de Criação:</strong> <%= @created_at.strftime("%d/%m/%Y, %H:%M") %><br>
+              <strong>Produto:</strong> <%= @campaign.product.name %><br>
+              <strong>Descrição:</strong> <%= @campaign.description %><br>
+              <strong>Preço Original:</strong> <%= number_to_currency(@campaign.original_price) %><br>
+              <strong>Preço com Desconto:</strong> <%= number_to_currency(@campaign.discounted_price, precision: 4) %><br>
+              <strong>Status:</strong> <%= @campaign.calculated_status %><br>
+              <strong>Data de Início:</strong> <%= l(@campaign.start_date) %><br>
+              <strong>Data de Término:</strong> <%= l(@campaign.end_date) %><br>
+              <strong>Criado por:</strong> <%= @campaign.user.email %><br>
+              <strong>Data de Criação:</strong> <%= l(@campaign.created_at, format: "%d/%m/%Y, %H:%M") %><br>
             </li>
           </ul>
 
-          <% if @discount %>
+          <% if @campaign.discount %>
             <h2>Histórico de Desconto</h2>
             <ul>
-              <% @campaign_histories.each do |history| %>
+              <% @campaign.campaign_histories.each do |history| %>
                 <li>
-                  <strong>Data/Hora:</strong> <%= history.data_hora.strftime("%d/%m/%Y, %H:%M") %><br>
+                  <strong>Data/Hora:</strong> <%= l(history.data_hora, format: "%d/%m/%Y, %H:%M") %><br>
                   <strong>Descrição da Mudança:</strong> <%= history.change_description %><br>
                   <strong>Usuário:</strong> <%= history.user.email %><br>
                 </li>
@@ -38,4 +40,3 @@
     </div>
   </div>
 </div>
-

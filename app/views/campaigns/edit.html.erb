@@ -1,3 +1,4 @@
+<!-- app/views/campaigns/edit.html.erb -->
 <div class="container mt-5">
   <h1 class="mb-4">Edit Campaign</h1>
 
@@ -25,14 +26,19 @@
 
     <div class="form-row">
       <div class="form-group col-md-6">
-        <%= f.label :original_price, class: "form-label" %>
-        <%= f.text_field :original_price, class: "form-control", placeholder: "Enter original price" %>
+        <%= f.label :original_price, "Original Price", class: "form-label" %>
+        <%= f.text_field :original_price, class: "form-control", readonly: true %>
       </div>
 
       <div class="form-group col-md-6">
-        <%= f.label :discounted_price, class: "form-label" %>
-        <%= f.text_field :discounted_price, class: "form-control", placeholder: "Enter discounted price" %>
+        <%= f.label :discounted_price, "Discounted Price", class: "form-label" %>
+        <%= f.text_field :discounted_price, class: "form-control", readonly: true %>
       </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :discount_value, "Discount Value", class: "form-label" %>
+      <%= f.text_field :discount_value, class: "form-control" %>
     </div>
 
     <div class="form-row">
@@ -48,7 +54,7 @@
     </div>
 
     <!-- Incluindo os campos de desconto dentro de fields_for -->
-    <%= f.fields_for :discount, @campaign.discount || @campaign.build_discount do |discount_form| %>
+    <%= f.fields_for :discounts do |discount_form| %>
       <div class="form-group">
         <%= discount_form.label :discount_type, "Discount Type", class: "form-label" %>
         <%= discount_form.select :discount_type, [['Percentage', 'percentual'], ['Fixed Amount', 'valor_fixo']], { prompt: "Select discount type" }, class: "form-control" %>

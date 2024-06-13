@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_06_11_224847) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_13_213535) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -49,7 +49,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_11_224847) do
     t.datetime "data_hora"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "discount_id"
     t.index ["campaign_id"], name: "index_campaign_histories_on_campaign_id"
+    t.index ["discount_id"], name: "index_campaign_histories_on_discount_id"
     t.index ["user_id"], name: "index_campaign_histories_on_user_id"
   end
 
@@ -67,6 +69,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_11_224847) do
     t.string "created_by"
     t.json "discount_attributes"
     t.string "name"
+    t.decimal "discount_value"
     t.index ["product_id"], name: "index_campaigns_on_product_id"
     t.index ["user_id"], name: "index_campaigns_on_user_id"
   end
@@ -82,6 +85,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_11_224847) do
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.decimal "discount_price"
+    t.date "activation_date"
+    t.date "deactivation_date"
     t.index ["campaign_id"], name: "index_discounts_on_campaign_id"
     t.index ["user_id"], name: "index_discounts_on_user_id"
   end
@@ -106,9 +111,21 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_11_224847) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "versions", force: :cascade do |t|
+    t.string "item_type", null: false
+    t.bigint "item_id", null: false
+    t.string "event", null: false
+    t.string "whodunnit"
+    t.text "object"
+    t.datetime "created_at"
+    t.text "object_changes"
+    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "campaign_histories", "campaigns"
+  add_foreign_key "campaign_histories", "discounts"
   add_foreign_key "campaign_histories", "users"
   add_foreign_key "campaigns", "products"
   add_foreign_key "campaigns", "users"

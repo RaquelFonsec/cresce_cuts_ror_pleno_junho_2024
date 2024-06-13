@@ -1,154 +1,154 @@
+<!-- app/views/campaigns/index.html.erb -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todas Campanhas</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        body {
-            background-color: #f0f0f0;
-            color: #333;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todas Campanhas</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    body {
+      background-color: #f0f0f0;
+      color: #333;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
 
-        table {
-            background-color: #fff;
-            color: #333;
-            width: 100%;
-            border-collapse: collapse;
-            border: 1px solid #ddd;
-        }
+    table {
+      background-color: #fff;
+      color: #333;
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid #ddd;
+    }
 
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
 
-        th {
-            background-color: #f2f2f2;
-        }
+    th {
+      background-color: #f2f2f2;
+    }
 
-        .btn {
-            background-color: #007bff;
-            color: #fff;
-            text-decoration: none;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
+    .btn {
+      background-color: #007bff;
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
 
-        .btn:hover {
-            background-color: #0056b3;
-        }
+    .btn:hover {
+      background-color: #0056b3;
+    }
 
-        .link {
-            color: #007bff;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
+    .link {
+      color: #007bff;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
 
-        .link:hover {
-            color: #0056b3;
-        }
+    .link:hover {
+      color: #0056b3;
+    }
 
-        .status-icon {
-            margin-right: 8px;
-        }
+    .status-icon {
+      margin-right: 8px;
+    }
 
-        .actions {
-            display: flex;
-            align-items: center;
-        }
+    .actions {
+      display: flex;
+      align-items: center;
+    }
 
-        .actions a, .actions button {
-            margin-right: 10px;
-        }
+    .actions a, .actions button {
+      margin-right: 10px;
+    }
 
-        .actions i {
-            margin-right: 4px;
-        }
+    .actions i {
+      margin-right: 4px;
+    }
 
-        /* Estilo para a frase promocional */
-        .promo-message {
-            font-size: 24px;
-            color: #007bff; /* Azul */
-            text-align: center;
-            margin-bottom: 20px; /* Espaço abaixo da frase */
-        }
-    </style>
+    /* Estilo para a frase promocional */
+    .promo-message {
+      font-size: 24px;
+      color: #007bff; /* Azul */
+      text-align: center;
+      margin-bottom: 20px; /* Espaço abaixo da frase */
+    }
+  </style>
 </head>
 <body>
-    <div class="promo-message">
-        Aproveite nossa campanha de descontos! Até 50% OFF em produtos selecionados.
-    </div>
+  <div class="promo-message">
+    Aproveite nossa campanha de descontos! Até 50% OFF em produtos selecionados.
+  </div>
 
-    
-
-    <table>
-        <thead>
-            <tr>
-                <th>Produto</th>
-                <th>Descrição</th>
-                <th>Preço original</th>
-                <th>Preço com Desconto</th>
-                <th>Status</th>
-                <th>Dados de Início</th>
-                <th>Dados de Término</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% @campaigns.each do |campaign| %>
-            <tr>
-                <td>
-                    <% if campaign.image.attached? %>
-                    <%= image_tag campaign.image, class: "img-thumbnail", style: "max-width: 100px; max-height: 100px;" %>
-                    <% else %>
-                    Sem imagem
-                    <% end %>
-                    <br>
-                    <%= campaign.product.name %>
-                </td>
-                <td><%= campaign.description %></td>
-                <td><%= number_to_currency(campaign.product.price) %></td>
-                <td><%= number_to_currency(campaign.discounted_price) %></td>
-                <td>
-                    <% if campaign.status == 'ativo' %>
-                    <i class="fas fa-check-circle status-icon" style="color: green;"></i>
-                    <% elsif campaign.status == 'agendado' %>
-                    <i class="fas fa-clock status-icon" style="color: orange;"></i>
-                    <% else %>
-                    <i class="fas fa-times-circle status-icon" style="color: red;"></i>
-                    <% end %>
-                    <%= campaign.calculated_status %>
-                </td>
-                <td><%= campaign.start_date.strftime("%d/%m/%Y") %></td>
-                <td><%= campaign.end_date.strftime("%d/%m/%Y") %></td>
-                <td class="actions">
-                    <%= link_to campaign_path(campaign), class: 'link' do %>
-                    <i class="fas fa-history"></i>
-                    <% end %>
-                    <%= link_to edit_campaign_path(campaign), class:'link' do %>
-                    <i class="fas fa-pen"></i>
-                    <% end %>
-                    <form action="<%= campaign_path(campaign) %>" method="post" style="display: inline;">
-                        <%= csrf_meta_tags %>
-                        <%= hidden_field_tag :_method, :delete %>
-                        <button type="submit" data-confirm="Tem certeza de que deseja excluir esta campanha?" class="link">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </form>
-                </td>
-            </tr>
+  <table>
+    <thead>
+      <tr>
+        <th>Produto</th>
+        <th>Descrição</th>
+        <th>Preço original</th>
+        <th>Preço com Desconto</th>
+        <th>Status</th>
+        <th>Data de Início</th>
+        <th>Data de Término</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @campaigns.each do |campaign| %>
+        <tr>
+          <td>
+            <% if campaign.image.attached? %>
+              <%= image_tag campaign.image, class: "img-thumbnail", style: "max-width: 100px; max-height: 100px;" %>
+            <% else %>
+              Sem imagem
             <% end %>
-        </tbody>
-    </table>
-    <%= link_to 'Nova Campanha', new_campaign_path, class: "btn btn-success" %>
+            <br>
+            <%= campaign.product.name %>
+          </td>
+          <td><%= campaign.description %></td>
+          <td><%= number_to_currency(campaign.product.price) %></td>
+          <td><%= number_to_currency(campaign.discounted_price) %></td>
+          <td>
+            <% if campaign.status == 'ativo' %>
+              <i class="fas fa-check-circle status-icon" style="color: green;"></i>
+            <% elsif campaign.status == 'agendado' %>
+              <i class="fas fa-clock status-icon" style="color: orange;"></i>
+            <% else %>
+              <i class="fas fa-times-circle status-icon" style="color: red;"></i>
+            <% end %>
+            <%= campaign.calculated_status %>
+          </td>
+          <td><%= l(campaign.start_date) %></td>
+          <td><%= l(campaign.end_date) %></td>
+          <td class="actions">
+            <%= link_to campaign_path(campaign), class: 'link' do %>
+              <i class="fas fa-history"></i> Histórico
+            <% end %>
+            <%= link_to edit_campaign_path(campaign), class: 'link' do %>
+              <i class="fas fa-pen"></i> Editar
+            <% end %>
+            <form action="<%= campaign_path(campaign) %>" method="post" style="display: inline;">
+              <%= csrf_meta_tags %>
+              <%= hidden_field_tag :_method, :delete %>
+              <button type="submit" data-confirm="Tem certeza de que deseja excluir esta campanha?" class="link">
+                <i class="fas fa-trash"></i> Excluir
+              </button>
+            </form>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= link_to 'Nova Campanha', new_campaign_path, class: "btn btn-success" %>
 </body>
 </html>
