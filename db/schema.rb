@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_06_13_213535) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_14_145116) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -70,8 +70,22 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_13_213535) do
     t.json "discount_attributes"
     t.string "name"
     t.decimal "discount_value"
+    t.decimal "discount_amount"
+    t.bigint "discount_id"
+    t.index ["discount_id"], name: "index_campaigns_on_discount_id"
     t.index ["product_id"], name: "index_campaigns_on_product_id"
     t.index ["user_id"], name: "index_campaigns_on_user_id"
+  end
+
+  create_table "discount_histories", force: :cascade do |t|
+    t.bigint "campaign_id", null: false
+    t.text "description"
+    t.string "changed_by"
+    t.datetime "changed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "discount_type"
+    t.index ["campaign_id"], name: "index_discount_histories_on_campaign_id"
   end
 
   create_table "discounts", force: :cascade do |t|
@@ -107,6 +121,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_13_213535) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -118,7 +133,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_13_213535) do
     t.string "whodunnit"
     t.text "object"
     t.datetime "created_at"
-    t.text "object_changes"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
@@ -127,8 +141,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_13_213535) do
   add_foreign_key "campaign_histories", "campaigns"
   add_foreign_key "campaign_histories", "discounts"
   add_foreign_key "campaign_histories", "users"
+  add_foreign_key "campaigns", "discounts"
   add_foreign_key "campaigns", "products"
   add_foreign_key "campaigns", "users"
+  add_foreign_key "discount_histories", "campaigns"
   add_foreign_key "discounts", "campaigns"
   add_foreign_key "discounts", "users"
 end

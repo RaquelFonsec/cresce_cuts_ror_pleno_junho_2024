@@ -1,4 +1,3 @@
-
 <!-- app/views/campaigns/show.html.erb -->
 <div class="container mt-5">
   <div class="row justify-content-center">
@@ -25,12 +24,18 @@
             <ul>
               <% @campaign.campaign_histories.each do |history| %>
                 <li>
-                  <strong>Data/Hora:</strong> <%= l(history.data_hora, format: "%d/%m/%Y, %H:%M") %><br>
+                  <% if history.data_hora.present? %>
+                    <strong>Data/Hora:</strong> <%= l(history.data_hora, format: "%d/%m/%Y, %H:%M") %><br>
+                  <% else %>
+                    <strong>Data/Hora:</strong> Informação não disponível<br>
+                  <% end %>
                   <strong>Descrição da Mudança:</strong> <%= history.change_description %><br>
                   <strong>Usuário:</strong> <%= history.user.email %><br>
                 </li>
               <% end %>
             </ul>
+          <% else %>
+            <p>Nenhum histórico de desconto disponível para esta campanha.</p>
           <% end %>
 
           <%= link_to 'Editar', edit_campaign_path(@campaign), class: "btn btn-primary btn-sm" %>

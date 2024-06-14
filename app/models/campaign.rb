@@ -14,8 +14,6 @@ class Campaign < ApplicationRecord
 
   enum status: { ativo: 0, expirado: 1 }
 
-  DISCOUNT_TYPES = ['percentual', 'fixo'].freeze
-
   before_create :set_initial_status
   before_destroy :destroy_campaign_histories
   before_save :calculate_discounted_price
@@ -51,7 +49,7 @@ class Campaign < ApplicationRecord
   private
 
   def end_date_after_start_date
-    if end_date <= start_date
+    if end_date.present? && start_date.present? && end_date <= start_date
       errors.add(:end_date, "deve ser após a data de início")
     end
   end

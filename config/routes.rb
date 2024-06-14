@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   end
 
   resources :campaigns do
-    resources :discounts, only: [:new, :create, :update, :destroy]
+    resources :discounts, only: [:create, :update, :destroy] 
     member do
       get 'discount_history'
       get 'revert_version'

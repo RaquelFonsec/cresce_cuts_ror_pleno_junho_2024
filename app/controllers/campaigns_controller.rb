@@ -1,5 +1,5 @@
 class CampaignsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user! 
   before_action :set_campaign, only: [:show, :edit, :update, :destroy]
   before_action :load_products, only: [:new, :edit, :create, :update]
 
@@ -18,22 +18,24 @@ class CampaignsController < ApplicationController
   end
 
   def new
-    @campaign = Campaign.new
-    @campaign.build_discount # Build a discount association for the form
+    @campaign = current_user.campaigns.build
+    @products = Product.all 
   end
   
   def create
-    @campaign = Campaign.new(campaign_params)
-    @campaign.user = current_user
+    @campaign = current_user.campaigns.build(campaign_params)
+    build_discount 
+  
     if @campaign.save
-      # Lógica adicional, se necessário
-      render json: @campaign, status: :created
+      redirect_to campaigns_path, notice: 'Campanha criada com sucesso.'
     else
-      render json: @campaign.errors, status: :unprocessable_entity
+      render :new
     end
   end
   
 
+  
+ 
 
   def edit
     @campaign.build_discount unless @campaign.discount
@@ -48,11 +50,13 @@ class CampaignsController < ApplicationController
     end
   end
 
+  
   def destroy
+    @campaign.campaign_histories.destroy_all
     @campaign.destroy
     redirect_to campaigns_path, notice: 'Campaign was successfully deleted.'
   end
-
+  
   private
 
   def set_campaign
@@ -62,7 +66,10 @@ class CampaignsController < ApplicationController
   def load_products
     @products = Product.all
   end
-  
+  def build_discount
+    discount_attributes = params.require(:campaign).require(:discount_attributes).permit(:discount_type, :discount_value)
+    @campaign.build_discount(discount_attributes.merge(user_id: current_user.id))
+  end
 
   def campaign_params
     params.require(:campaign).permit(:product_id, :description, :start_date, :end_date, :status, :image,
