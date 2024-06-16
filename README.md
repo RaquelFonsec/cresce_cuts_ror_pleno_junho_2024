@@ -17,19 +17,7 @@ Status dos Descontos: Implementa funcionalidades para definir e visualizar o sta
 Histórico de Descontos: Registra e permite visualizar o histórico de alterações feitas nos descontos, incluindo dados, hora e usuário responsável por cada alteração.
 
 
-
-![campanha](/home/raquel/Vídeos/campanha.png)
-
-
-
-
-
-
-
-
-
-
-
+![Campanha](campanha.png)
 
 
 
