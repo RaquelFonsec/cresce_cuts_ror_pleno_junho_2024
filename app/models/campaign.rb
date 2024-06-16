@@ -22,7 +22,7 @@ class Campaign < ApplicationRecord
       if discount.discount_type == 'percentual' && discount.discount_value.present?
         percentage = discount.discount_value.to_f / 100.0
         self.discounted_price = product.price * (1 - percentage)
-      elsif discount.discount_type == 'valor_fixo' && discount.discount_value.present?
+      elsif discount.discount_type == 'fixo' && discount.discount_value.present?
         self.discounted_price = product.price - discount.discount_value.to_f
       else
         self.discounted_price = product.price
@@ -31,6 +31,7 @@ class Campaign < ApplicationRecord
       self.discounted_price = product.price
     end
   end
+  
 
   def original_price
     product.price
