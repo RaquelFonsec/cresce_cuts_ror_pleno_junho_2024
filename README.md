@@ -6,7 +6,7 @@ Funcionalidades
 
 Listagem de Produtos: Um aplicativo integrado à API da Fake Store para listar os produtos disponíveis.
 
-Criação de Descontos: Interface para gerenciamento de descontos em produtos específicos, permitindo a definição de descontos do tipo "de/por".
+Criação de Descontos: Interface para gerenciamento de descontos em produtos específicos, permitindo a definição de descontos do tipo "porcentagem/fixo".
 
 Visualização de Campanhas: Permite visualizar e editar campanhas de desconto criadas, exibindo o preço original e o preço com desconto.
 
@@ -15,6 +15,23 @@ Persistência de Dados: As campanhas de desconto são salvas em um banco de dado
 Status dos Descontos: Implementa funcionalidades para definir e visualizar o status dos descontos, como ativo, expirado, etc.
 
 Histórico de Descontos: Registra e permite visualizar o histórico de alterações feitas nos descontos, incluindo dados, hora e usuário responsável por cada alteração.
+
+
+
+![campanha](image-1.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Requisitos Não Funcionais
 

@@ -23,8 +23,12 @@
         </td>
         <td>
           <% changeset = version.changeset %>
-          <% changeset.each do |attribute, values| %>
-            <strong><%= attribute.titleize %>:</strong> <%= values.first %> → <%= values.last %><br>
+          <% if changeset.present? %>
+            <% changeset.each do |attribute, values| %>
+              <strong><%= attribute.titleize %>:</strong> <%= values.first %> → <%= values.last %><br>
+            <% end %>
+          <% else %>
+            Nenhuma alteração detectada
           <% end %>
         </td>
       </tr>
