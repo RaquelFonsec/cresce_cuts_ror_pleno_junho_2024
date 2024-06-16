@@ -123,28 +123,40 @@
             <%= campaign.product.name %>
           </td>
           <td><%= campaign.description %></td>
-          <td><%= number_to_currency(campaign.product.price, unit: "R$", precision: 2) %></td>
+          <td><%= number_to_currency(campaign.original_price, unit: "R$", precision: 2) %></td>
           <td><%= number_to_currency(campaign.discounted_price, unit: "R$", precision: 2) %></td>
           <td>
-            <% if campaign.status == 'ativo' %>
+            <% if campaign.ativo? %>
               <i class="fas fa-check-circle status-icon" style="color: green;"></i>
-            <% elsif campaign.status == 'agendado' %>
-              <i class="fas fa-clock status-icon" style="color: orange;"></i>
-            <% else %>
+              Ativo
+            <% elsif campaign.expirado? %>
               <i class="fas fa-times-circle status-icon" style="color: red;"></i>
+              Expirado
+            <% else %>
+              <i class="fas fa-clock status-icon" style="color: orange;"></i>
+              Agendado
             <% end %>
-            <%= campaign.calculated_status %>
           </td>
           <td><%= l(campaign.start_date) %></td>
           <td><%= l(campaign.end_date) %></td>
           <td class="actions">
-            <% if campaign.discount.present? %>
-              <%= link_to 'Histórico', history_discount_campaign_discount_path(campaign, campaign.discount), class: 'link' %>
-            <% else %>
-              <span class="link">Sem desconto</span>
-            <% end %>
-            <%= link_to 'Editar', edit_campaign_path(campaign), class: 'link' %>
-            <%= button_to 'Excluir', campaign_path(campaign), method: :delete, data: { confirm: 'Tem certeza de que deseja excluir esta campanha?' }, class: 'link' %>
+          <% if campaign.discount.present? %>
+          <%= link_to history_discount_campaign_discount_path(campaign, campaign.discount), class: 'link' do %>
+            <i class="fas fa-eye"></i> Histórico <!-- Ícone de olho -->
+          <% end %>
+        <% else %>
+          <span class="link">Sem desconto</span>
+        <% end %>
+        
+        <%= link_to edit_campaign_path(campaign), class: 'link' do %>
+          <i class="fas fa-pencil-alt"></i> <!-- Ícone de caneta -->
+        <% end %>
+        
+        <%= button_to campaign_path(campaign), method: :delete, data: { confirm: 'Tem certeza de que deseja excluir esta campanha?' }, class: 'link' do %>
+          <i class="fas fa-trash-alt"></i> <!-- Ícone de lixeira -->
+        <% end %>
+        
+        
           </td>
         </tr>
       <% end %>
