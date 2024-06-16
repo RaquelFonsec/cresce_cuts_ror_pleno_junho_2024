@@ -1,3 +1,4 @@
+<!-- app/views/campaigns/index.html.erb -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -122,8 +123,8 @@
             <%= campaign.product.name %>
           </td>
           <td><%= campaign.description %></td>
-          <td><%= number_to_currency(campaign.product.price) %></td>
-          <td><%= number_to_currency(campaign.discounted_price) %></td>
+          <td><%= number_to_currency(campaign.product.price, unit: "R$", precision: 2) %></td>
+          <td><%= number_to_currency(campaign.discounted_price, unit: "R$", precision: 2) %></td>
           <td>
             <% if campaign.status == 'ativo' %>
               <i class="fas fa-check-circle status-icon" style="color: green;"></i>
@@ -137,19 +138,13 @@
           <td><%= l(campaign.start_date) %></td>
           <td><%= l(campaign.end_date) %></td>
           <td class="actions">
-            <%= link_to campaign_path(campaign), class: 'link' do %>
-              <i class="fas fa-history"></i> Histórico
+            <% if campaign.discount.present? %>
+              <%= link_to 'Histórico', history_discount_campaign_discount_path(campaign, campaign.discount), class: 'link' %>
+            <% else %>
+              <span class="link">Sem desconto</span>
             <% end %>
-            <%= link_to edit_campaign_path(campaign), class: 'link' do %>
-              <i class="fas fa-pen"></i> Editar
-            <% end %>
-            <form action="<%= campaign_path(campaign) %>" method="post" style="display: inline;">
-              <%= csrf_meta_tags %>
-              <%= hidden_field_tag :_method, :delete %>
-              <button type="submit" data-confirm="Tem certeza de que deseja excluir esta campanha?" class="link">
-                <i class="fas fa-trash"></i> Excluir
-              </button>
-            </form>
+            <%= link_to 'Editar', edit_campaign_path(campaign), class: 'link' %>
+            <%= button_to 'Excluir', campaign_path(campaign), method: :delete, data: { confirm: 'Tem certeza de que deseja excluir esta campanha?' }, class: 'link' %>
           </td>
         </tr>
       <% end %>

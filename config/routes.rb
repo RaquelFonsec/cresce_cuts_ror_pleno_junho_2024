@@ -1,4 +1,8 @@
+
+
 Rails.application.routes.draw do
+  devise_for :users
+
   namespace :api do
     resources :products, only: [:index]
   end
@@ -10,14 +14,22 @@ Rails.application.routes.draw do
   end
 
   resources :campaigns do
-    resources :discounts, only: [:create, :update, :destroy] 
+    resources :discounts, only: [:create, :update, :destroy] do
+      member do
+        get 'history', to: 'discounts#history', as: 'history_discount'
+        get 'diff', to: 'discounts#diff', as: 'diff_discount'
+      end
+    end
+
     member do
-      get 'discount_history'
-      get 'revert_version'
+      get 'discount_history', to: 'campaigns#discount_history', as: 'discount_history'
+      get 'revert_version', to: 'campaigns#revert_version', as: 'revert_version'
+    end
+
+    collection do
+      get 'index_all', to: 'campaigns#index', as: 'index_all'
     end
   end
 
-  devise_for :users
-
   root to: 'pages#home'
-end
+end 

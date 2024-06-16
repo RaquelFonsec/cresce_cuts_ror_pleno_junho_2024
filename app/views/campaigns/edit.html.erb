@@ -27,18 +27,13 @@
     <div class="form-row">
       <div class="form-group col-md-6">
         <%= f.label :original_price, "Original Price", class: "form-label" %>
-        <%= f.text_field :original_price, class: "form-control", readonly: true %>
+        <%= f.text_field :original_price, class: "form-control", readonly: true, value: number_to_currency(@campaign.original_price) %>
       </div>
 
       <div class="form-group col-md-6">
         <%= f.label :discounted_price, "Discounted Price", class: "form-label" %>
-        <%= f.text_field :discounted_price, class: "form-control", readonly: true %>
+        <%= f.text_field :discounted_price, class: "form-control", readonly: true, value: number_to_currency(@campaign.discounted_price) %>
       </div>
-    </div>
-
-    <div class="form-group">
-      <%= f.label :discount_value, "Discount Value", class: "form-label" %>
-      <%= f.text_field :discount_value, class: "form-control" %>
     </div>
 
     <div class="form-row">
@@ -53,11 +48,16 @@
       </div>
     </div>
 
-    <!-- Incluindo os campos de desconto dentro de fields_for -->
-    <%= f.fields_for :discounts do |discount_form| %>
+    <!-- Adicionando os campos de desconto dentro de fields_for -->
+    <%= f.fields_for :discount do |discount_form| %>
       <div class="form-group">
         <%= discount_form.label :discount_type, "Discount Type", class: "form-label" %>
         <%= discount_form.select :discount_type, [['Percentage', 'percentual'], ['Fixed Amount', 'valor_fixo']], { prompt: "Select discount type" }, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= discount_form.label :discount_value, "Discount Value", class: "form-label" %>
+        <%= discount_form.text_field :discount_value, class: "form-control" %>
       </div>
     <% end %>
 
@@ -77,3 +77,36 @@
     </div>
   <% end %>
 </div>
+
+<script>
+  // Script para recalcular o preço com desconto ao editar o tipo ou valor do desconto
+  document.addEventListener("DOMContentLoaded", function() {
+    const originalPriceField = document.getElementById("campaign_original_price");
+    const discountedPriceField = document.getElementById("campaign_discounted_price");
+    const discountTypeField = document.getElementById("campaign_discount_attributes_discount_type");
+    const discountValueField = document.getElementById("campaign_discount_attributes_discount_value");
+
+    function updateDiscountedPrice() {
+      const originalPrice = parseFloat(originalPriceField.value.replace(/[^0-9.-]+/g,""));
+      const discountType = discountTypeField.value;
+      const discountValue = parseFloat(discountValueField.value.replace(/[^0-9.-]+/g,""));
+
+      let discountedPrice = originalPrice;
+
+      if (discountType === "percentual") {
+        discountedPrice = originalPrice * (1 - discountValue / 100);
+      } else if (discountType === "valor_fixo") {
+        discountedPrice = originalPrice - discountValue;
+      }
+
+      discountedPriceField.value = discountedPrice.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    discountTypeField.addEventListener("change", updateDiscountedPrice);
+    discountValueField.addEventListener("input", updateDiscountedPrice);
+
+    // Executa o cálculo inicial ao carregar a página
+    updateDiscountedPrice();
+  });
+</script>
+

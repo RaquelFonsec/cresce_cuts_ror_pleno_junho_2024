@@ -1,0 +1,20 @@
+<div class='row mt'>
+  <div class='col-sm-12'>
+    <h2><%= "Diferença entre a versão #{@version.id} e a versão atual" %></h2>
+    <style><%= Diffy::CSS %></style>
+    <div class='well diff'>
+      <p>
+        <strong>Nome:</strong>
+        <%= diff(@version.reify.name, @discount.name) %>
+      </p>
+      <p>
+        <strong>Descrição:</strong>
+        <%= diff(@version.reify.description, @discount.description) %>
+      </p>
+      <!-- Adicione mais campos para comparar conforme necessário -->
+    </div>
+  </div>
+</div>
+<div class='fr'>
+  <%= link_to 'Voltar', history_discount_path(@discount), class: 'btn btn-primary' %>
+</div>

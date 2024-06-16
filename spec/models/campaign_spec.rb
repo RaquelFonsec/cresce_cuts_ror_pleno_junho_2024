@@ -1,22 +1,32 @@
-# spec/models/campaign_spec.rb
 
 require 'rails_helper'
 
 RSpec.describe Campaign, type: :model do
-  let(:user) { User.create(email: 'test@example.com', password: 'password') }
-  let(:product) { Product.create(name: 'Product A', price: 100.0) }
+  describe '#calculate_discounted_price' do
+    let(:product) { Product.create(price: 200.0) }  
+    let(:campaign) { Campaign.create(product: product) }  
 
-  it 'creates a campaign with valid attributes' do
-    campaign_params = {
-      product_id: product.id,
-      description: 'Test Campaign',
-      start_date: Date.today,
-      end_date: Date.tomorrow,
-      status: :ativo
-    }
-    campaign = user.campaigns.new(campaign_params)
-    expect(campaign.save).to be_truthy
-    expect(campaign.errors.full_messages).to be_empty  # Certifica-se de que não há erros de validação
-    expect(campaign.id).not_to be_nil  # Verifica se a campanha foi salva com sucesso e possui um ID válido
+    context 'when discount is percentual' do
+      it 'calculates discounted price correctly' do
+        discount = Discount.create(discount_type: 'percentual', discount_value: 25)
+        campaign.discount = discount
+        campaign.calculate_discounted_price
+        expect(campaign.discounted_price).to eq(150.0)  
+    end
+
+    context 'when discount is fixo' do
+      it 'calculates discounted price correctly' do
+        discount = Discount.create(discount_type: 'fixo', discount_value: 50.0)
+        campaign.discount = discount
+        campaign.calculate_discounted_price
+        expect(campaign.discounted_price).to eq(150.0)  
+    end
+
+    context 'when no discount is present' do
+      it 'sets discounted price to original product price' do
+        campaign.calculate_discounted_price
+        expect(campaign.discounted_price).to eq(200.0)  
+      end
+    end
   end
 end

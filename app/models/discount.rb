@@ -1,34 +1,32 @@
-# app/models/discount.rb
+
 
 class Discount < ApplicationRecord
-  belongs_to :campaign
   belongs_to :user
+  belongs_to :campaign
+  has_many :campaign_histories, dependent: :destroy
+  
+  has_paper_trail  
 
-  validates :discount_type, presence: true
-  validates :discount_value, presence: true
-
-  after_save :record_history
-
-  def discount_price
-    if discount_type == 'percentual'
-      campaign.product.price * (1 - discount_value / 100.0)
-    elsif discount_type == 'fixo'
-      campaign.product.price - discount_value
-    else
-      campaign.product.price
-    end
-  end
+  after_update :record_history_callback
 
   private
 
-  def record_history
-    CampaignHistory.create!(
-      discount: self,
-      user: self.user,
-      campaign: self.campaign,
-      change_description: "Discount created or updated",
-      data_hora: Time.current # Garante que a data e hora atual sejam registradas
-    )
+  def record_history(user_email)
+    last_campaign_id = campaign_id_was || campaign_id
+    changes_description = changes.map { |attr, values| "#{attr} de '#{values[0]}' para '#{values[1]}'" }.join(", ")
+
+    
+    if changes_description.present?
+      CampaignHistory.create(
+        campaign_id: last_campaign_id,
+        user_email: user_email,
+        changes_description: changes_description
+      )
+    end
+  end
+
+  def record_history_callback
+    user_email = PaperTrail.request.whodunnit ? User.find(PaperTrail.request.whodunnit).email : 'Unknown user'
+    record_history(user_email)
   end
 end
-

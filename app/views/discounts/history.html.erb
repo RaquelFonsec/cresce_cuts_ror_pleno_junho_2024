@@ -1,0 +1,35 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID do Desconto</th>
+      <th>Evento</th>
+      <th>Data de Alteração</th>
+      <th>Usuário</th>
+      <th>Alterações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @versions.each do |version| %>
+      <tr>
+        <td><%= version.item_id %></td>
+        <td><%= version.event %></td>
+        <td><%= version.created_at.strftime("%d/%m/%Y - %H:%M") %></td>
+        <td>
+          <% if version.whodunnit.present? %>
+            <%= @users[version.whodunnit.to_i]&.email || "Usuário não encontrado" %>
+          <% else %>
+            Sistema
+          <% end %>
+        </td>
+        <td>
+          <% changeset = version.changeset %>
+          <% changeset.each do |attribute, values| %>
+            <strong><%= attribute.titleize %>:</strong> <%= values.first %> → <%= values.last %><br>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'Voltar para Todas as Campanhas', campaigns_path, class: 'btn btn-primary' %>

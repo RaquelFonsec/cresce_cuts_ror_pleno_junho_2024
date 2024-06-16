@@ -1,47 +1,29 @@
-<!-- app/views/campaigns/show.html.erb -->
-<div class="container mt-5">
-  <div class="row justify-content-center">
+
+<div class="container">
+  <div class="row">
     <div class="col-md-8">
-      <div class="card bg-light">
+      <h1><%= @campaign.title %></h1>
+      <p><%= @campaign.description %> por 30% !!</p>
+      
+      <h2>Detalhes da Campanha</h2>
+      <div class="card">
         <div class="card-body">
-          <h2>Detalhes da Campanha</h2>
-          <ul>
-            <li>
-              <strong>Produto:</strong> <%= @campaign.product.name %><br>
-              <strong>Descrição:</strong> <%= @campaign.description %><br>
-              <strong>Preço Original:</strong> <%= number_to_currency(@campaign.original_price) %><br>
-              <strong>Preço com Desconto:</strong> <%= number_to_currency(@campaign.discounted_price, precision: 4) %><br>
-              <strong>Status:</strong> <%= @campaign.calculated_status %><br>
-              <strong>Data de Início:</strong> <%= l(@campaign.start_date) %><br>
-              <strong>Data de Término:</strong> <%= l(@campaign.end_date) %><br>
-              <strong>Criado por:</strong> <%= @campaign.user.email %><br>
-              <strong>Data de Criação:</strong> <%= l(@campaign.created_at, format: "%d/%m/%Y, %H:%M") %><br>
-            </li>
-          </ul>
-
-          <% if @campaign.discount %>
-            <h2>Histórico de Desconto</h2>
-            <ul>
-              <% @campaign.campaign_histories.each do |history| %>
-                <li>
-                  <% if history.data_hora.present? %>
-                    <strong>Data/Hora:</strong> <%= l(history.data_hora, format: "%d/%m/%Y, %H:%M") %><br>
-                  <% else %>
-                    <strong>Data/Hora:</strong> Informação não disponível<br>
-                  <% end %>
-                  <strong>Descrição da Mudança:</strong> <%= history.change_description %><br>
-                  <strong>Usuário:</strong> <%= history.user.email %><br>
-                </li>
-              <% end %>
-            </ul>
-          <% else %>
-            <p>Nenhum histórico de desconto disponível para esta campanha.</p>
-          <% end %>
-
-          <%= link_to 'Editar', edit_campaign_path(@campaign), class: "btn btn-primary btn-sm" %>
-          <%= link_to 'Voltar', campaigns_path, class: "btn btn-secondary btn-sm" %>
+          <p><strong>Produto:</strong> <%= @campaign.product.name %></p>
+          <p><strong>Descrição:</strong> <%= @campaign.description %> por 30% !!</p>
+          <p><strong>Preço Original:</strong> <%= number_to_currency(@campaign.original_price) %></p>
+          <p><strong>Preço com Desconto:</strong> <%= number_to_currency(@campaign.discounted_price) %></p>
+          <p><strong>Status:</strong> <%= @campaign.calculated_status %></p>
+          <p><strong>Data de Início:</strong> <%= l @campaign.start_date %></p>
+          <p><strong>Data de Término:</strong> <%= l @campaign.end_date %></p>
+          <p><strong>Criado por:</strong> <%= @campaign.user.email %></p>
         </div>
+      </div>
+      
+      <div class="mt-3">
+        <%= link_to 'Editar', edit_campaign_path(@campaign), class: 'btn btn-primary' %>
+        <%= link_to 'Voltar para todas as campanhas', campaigns_path, class: 'btn btn-secondary ml-2' %>
       </div>
     </div>
   </div>
 </div>
+

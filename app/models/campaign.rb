@@ -1,14 +1,14 @@
-# app/models/campaign.rb
+
 class Campaign < ApplicationRecord
+  has_paper_trail
   belongs_to :user
   belongs_to :product
   has_one :discount, dependent: :destroy
   has_many :campaign_histories, dependent: :destroy
-  accepts_nested_attributes_for :discount, allow_destroy: true
-
   has_one_attached :image
+  has_many :discounts
+  accepts_nested_attributes_for :discount
 
-  validates_associated :discount
   validates :start_date, :end_date, :product_id, :status, presence: true
   validate :end_date_after_start_date
 
@@ -18,20 +18,24 @@ class Campaign < ApplicationRecord
   before_destroy :destroy_campaign_histories
   before_save :calculate_discounted_price
 
-  def original_price
-    product.price
-  end
-
   def calculate_discounted_price
-    if discount.present? && discount.discount_type.present? && discount.discount_value.present?
-      if discount.discount_type == 'percentual'
-        self.discounted_price = product.price * (1 - discount.discount_value / 100.0)
-      elsif discount.discount_type == 'fixo'
-        self.discounted_price = product.price - discount.discount_value
+    if discount.present?
+      if discount.discount_type == 'percentual' && discount.discount_value.present?
+        percentage = discount.discount_value.to_f / 100.0
+        self.discounted_price = product.price * (1 - percentage)
+      elsif discount.discount_type == 'fixo' && discount.discount_value.present?
+        self.discounted_price = product.price - discount.discount_value.to_f
+      else
+        self.discounted_price = product.price
       end
     else
       self.discounted_price = product.price
     end
+  end
+  
+
+  def original_price
+    product.price
   end
 
   def calculated_status
@@ -44,6 +48,23 @@ class Campaign < ApplicationRecord
     else
       'Ativo'
     end
+  end
+
+  def changes_for_paper_trail
+    changes = {}
+    if saved_changes.present?
+      saved_changes.each do |attr, values|
+        next if attr == 'updated_at' || attr == 'created_at'
+
+        case attr
+        when 'status'
+          changes['Status'] = "#{Campaign.statuses[values[0]]} -> #{Campaign.statuses[values[1]]}"
+        when 'start_date', 'end_date'
+          changes[attr.capitalize] = "#{values[0].strftime('%d/%m/%Y')} -> #{values[1].strftime('%d/%m/%Y')}"
+        end
+      end
+    end
+    changes
   end
 
   private
@@ -62,3 +83,4 @@ class Campaign < ApplicationRecord
     campaign_histories.destroy_all
   end
 end
+

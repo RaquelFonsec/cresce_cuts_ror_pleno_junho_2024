@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_06_14_145116) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_15_212838) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -77,6 +77,18 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_14_145116) do
     t.index ["user_id"], name: "index_campaigns_on_user_id"
   end
 
+  create_table "changes", force: :cascade do |t|
+    t.string "primary_key"
+    t.string "table"
+    t.string "operation"
+    t.jsonb "before"
+    t.jsonb "after"
+    t.jsonb "context"
+    t.datetime "committed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "discount_histories", force: :cascade do |t|
     t.bigint "campaign_id", null: false
     t.text "description"
@@ -133,6 +145,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_14_145116) do
     t.string "whodunnit"
     t.text "object"
     t.datetime "created_at"
+    t.jsonb "object_changes"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 

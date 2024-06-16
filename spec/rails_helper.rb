@@ -5,6 +5,7 @@ require_relative '../config/environment'
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
+require 'faker'
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -30,6 +31,7 @@ rescue ActiveRecord::PendingMigrationError => e
   abort e.to_s.strip
 end
 RSpec.configure do |config|
+  config.include Devise::Test::IntegrationHelpers, type: :feature
   config.include Devise::Test::ControllerHelpers, type: :controller
   Shoulda::Matchers.configure do |matchers_config|
     matchers_config.integrate do |with|
