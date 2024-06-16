@@ -18,7 +18,8 @@ Histórico de Descontos: Registra e permite visualizar o histórico de alteraç�
 
 
 
-![campanha](image-1.png)
+![campanha](/home/raquel/Vídeos/campanha.png)
+
 
 
 
