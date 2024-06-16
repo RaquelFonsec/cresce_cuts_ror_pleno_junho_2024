@@ -1,4 +1,3 @@
-
 class Campaign < ApplicationRecord
   has_paper_trail
   belongs_to :user
@@ -23,7 +22,7 @@ class Campaign < ApplicationRecord
       if discount.discount_type == 'percentual' && discount.discount_value.present?
         percentage = discount.discount_value.to_f / 100.0
         self.discounted_price = product.price * (1 - percentage)
-      elsif discount.discount_type == 'fixo' && discount.discount_value.present?
+      elsif discount.discount_type == 'valor_fixo' && discount.discount_value.present?
         self.discounted_price = product.price - discount.discount_value.to_f
       else
         self.discounted_price = product.price
@@ -32,15 +31,14 @@ class Campaign < ApplicationRecord
       self.discounted_price = product.price
     end
   end
-  
 
   def original_price
     product.price
   end
 
   def calculated_status
-    if status == 'ativo'
-      'Ativo'
+    if expirado?
+      'Expirado'
     elsif start_date.future?
       'Agendado'
     elsif end_date.past?
@@ -48,23 +46,6 @@ class Campaign < ApplicationRecord
     else
       'Ativo'
     end
-  end
-
-  def changes_for_paper_trail
-    changes = {}
-    if saved_changes.present?
-      saved_changes.each do |attr, values|
-        next if attr == 'updated_at' || attr == 'created_at'
-
-        case attr
-        when 'status'
-          changes['Status'] = "#{Campaign.statuses[values[0]]} -> #{Campaign.statuses[values[1]]}"
-        when 'start_date', 'end_date'
-          changes[attr.capitalize] = "#{values[0].strftime('%d/%m/%Y')} -> #{values[1].strftime('%d/%m/%Y')}"
-        end
-      end
-    end
-    changes
   end
 
   private
@@ -83,4 +64,3 @@ class Campaign < ApplicationRecord
     campaign_histories.destroy_all
   end
 end
-
