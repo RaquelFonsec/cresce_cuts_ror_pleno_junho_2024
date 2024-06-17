@@ -13,27 +13,25 @@ class CampaignsController < ApplicationController
 
   def new
     @campaign = Campaign.new
-    @products = Product.all
     @campaign.build_discount  
   end
 
-  
   def create
     @campaign = Campaign.new(campaign_params)
-    
+    @campaign.user = current_user 
+    if @campaign.discount
+      @campaign.discount.user = current_user 
+    end
+
     if @campaign.save
       redirect_to campaigns_path, notice: 'Campaign was successfully created.'
     else
+      Rails.logger.debug("Failed to create campaign: #{@campaign.errors.full_messages.join(", ")}")
       render :new
     end
   end
   
 
-
-  def edit
-    @products = Product.all
-    @campaign.build_discount unless @campaign.discount
-  end
 
   def update
     if @campaign.update(campaign_params)
@@ -42,8 +40,12 @@ class CampaignsController < ApplicationController
       redirect_to edit_campaign_path(@campaign)
     end
   end
-  
-  
+
+ 
+  def edit
+    @products = Product.all
+    @campaign.build_discount unless @campaign.discount
+  end
   
 
   def destroy
@@ -70,7 +72,10 @@ class CampaignsController < ApplicationController
   end
 
   def campaign_params
-    params.require(:campaign).permit(:product_id, :user_id, :description, :start_date, :end_date, :status, :image, discount_attributes: [:id, :discount_type, :discount_value, :user_id])
+    params.require(:campaign).permit(
+      :product_id, :description, :start_date, :end_date, :status, :image, 
+      discount_attributes: [:id, :discount_type, :discount_value, :user_id, :_destroy]
+    )
   end
   
   def discount_params

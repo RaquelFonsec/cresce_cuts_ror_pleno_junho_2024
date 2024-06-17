@@ -6,7 +6,8 @@ class Discount < ApplicationRecord
   has_many :campaign_histories, dependent: :destroy
   
   has_paper_trail  
-
+  validates :discount_type, presence: true
+  validates :discount_value, presence: true
   after_update :record_history_callback
 
   private
