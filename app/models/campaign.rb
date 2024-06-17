@@ -10,7 +10,7 @@ class Campaign < ApplicationRecord
 
   validates :start_date, :end_date, :product_id, :status, presence: true
   validate :end_date_after_start_date
-
+  validates :description, presence: true
   enum status: { ativo: 0, expirado: 1 }
 
   before_create :set_initial_status

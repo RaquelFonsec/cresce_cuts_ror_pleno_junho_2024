@@ -78,35 +78,3 @@
   <% end %>
 </div>
 
-<script>
-  // Script para recalcular o preço com desconto ao editar o tipo ou valor do desconto
-  document.addEventListener("DOMContentLoaded", function() {
-    const originalPriceField = document.getElementById("campaign_original_price");
-    const discountedPriceField = document.getElementById("campaign_discounted_price");
-    const discountTypeField = document.getElementById("campaign_discount_attributes_discount_type");
-    const discountValueField = document.getElementById("campaign_discount_attributes_discount_value");
-
-    function updateDiscountedPrice() {
-      const originalPrice = parseFloat(originalPriceField.value.replace(/[^0-9.-]+/g,""));
-      const discountType = discountTypeField.value;
-      const discountValue = parseFloat(discountValueField.value.replace(/[^0-9.-]+/g,""));
-
-      let discountedPrice = originalPrice;
-
-      if (discountType === "percentual") {
-        discountedPrice = originalPrice * (1 - discountValue / 100);
-      } else if (discountType === "valor_fixo") {
-        discountedPrice = originalPrice - discountValue;
-      }
-
-      discountedPriceField.value = discountedPrice.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    }
-
-    discountTypeField.addEventListener("change", updateDiscountedPrice);
-    discountValueField.addEventListener("input", updateDiscountedPrice);
-
-    // Executa o cálculo inicial ao carregar a página
-    updateDiscountedPrice();
-  });
-</script>
-

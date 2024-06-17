@@ -1,0 +1,42 @@
+<%= form_with(model: @campaign, local: true, html: { class: "row g-3 text-dark", multipart: true }) do |form| %>
+    <div class="mb-3">
+      <%= form.label :product_id, "Produto", class: "form-label form-label-text-primary" %>
+      <%= form.collection_select :product_id, @products, :id, :name, { prompt: "Selecione um produto" }, class: "form-control form-control-sm" %>
+    </div>
+    <div class="mb-3">
+      <%= form.label :description, "Descrição", class: "form-label form-label-text-primary" %>
+      <%= form.text_area :description, class: "form-control form-control-sm", placeholder: "Digite a descrição" %>
+    </div>
+    <div class="row g-3">
+      <div class="col">
+        <%= form.label :start_date, "Data de Início", class: "form-label form-label-text-primary" %>
+        <%= form.date_field :start_date, class: "form-control form-control-sm" %>
+      </div>
+      <div class="col">
+        <%= form.label :end_date, "Data de Término", class: "form-label form-label-text-primary" %>
+        <%= form.date_field :end_date, class: "form-control form-control-sm" %>
+      </div>
+    </div>
+    <div class="mb-3">
+      <%= form.label :status, "Status", class: "form-label form-label-text-primary" %>
+      <%= form.select :status, Campaign.statuses.keys.map { |status| [status.humanize, status] }, { prompt: "Selecione um status" }, class: "form-control form-control-sm" %>
+    </div>
+    <div class="mb-3">
+      <%= form.label :image, "Upload de Imagem", class: "form-label form-label-text-primary" %>
+      <%= form.file_field :image, class: "form-control form-control-sm" %>
+    </div>
+  
+    <%= form.fields_for :discount, @campaign.discount || @campaign.build_discount do |discount_form| %>
+      <div class="mb-3">
+        <%= discount_form.label :discount_type, "Tipo de Desconto", class: "form-label form-label-text-primary" %>
+        <%= discount_form.select :discount_type, [['Percentual', 'percentual'], ['Valor Fixo', 'valor_fixo']], { prompt: "Selecione um tipo de desconto" }, class: "form-control form-control-sm" %>
+      </div>
+      <div class="mb-3">
+        <%= discount_form.label :discount_value, "Valor do Desconto", class: "form-label form-label-text-primary" %>
+        <%= discount_form.number_field :discount_value, class: "form-control form-control-sm" %>
+      </div>
+    <% end %>
+  
+    <%= form.submit "Salvar Alterações", class: "btn btn-primary btn-sm btn-block mt-3" %>
+  <% end %>
+  

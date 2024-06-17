@@ -76,12 +76,11 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
-  gem "rspec-rails", "6.0.1"
-  gem 'shoulda-matchers', '~> 4.0'
+  gem 'rspec-rails'
+  gem 'factory_bot_rails'
+  gem 'database_cleaner-active_record'
   gem 'rails-controller-testing'
   gem 'faker'
-
-  
 end
 gem 'httparty'
 gem 'paper_trail', '~> 12.0'

@@ -12,22 +12,23 @@ class CampaignsController < ApplicationController
   end
 
   def new
-    @campaign = current_user.campaigns.build
+    @campaign = Campaign.new
     @products = Product.all
     @campaign.build_discount  
   end
 
+  
   def create
-    @campaign = current_user.campaigns.build(campaign_params)
-    build_discount
-
+    @campaign = Campaign.new(campaign_params)
+    
     if @campaign.save
-      redirect_to campaigns_path, notice: 'Campanha criada com sucesso.'
+      redirect_to campaigns_path, notice: 'Campaign was successfully created.'
     else
-      @products = Product.all  
       render :new
     end
   end
+  
+
 
   def edit
     @products = Product.all
@@ -35,16 +36,15 @@ class CampaignsController < ApplicationController
   end
 
   def update
-    respond_to do |format|
-      if @campaign.update(campaign_params)
-        format.html { redirect_to @campaign, notice: 'Campanha atualizada com sucesso.' }
-        format.json { render :show, status: :ok, location: @campaign }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @campaign.errors, status: :unprocessable_entity }
-      end
+    if @campaign.update(campaign_params)
+      redirect_to @campaign, notice: 'Campaign was successfully updated.'
+    else
+      redirect_to edit_campaign_path(@campaign)
     end
-  end 
+  end
+  
+  
+  
 
   def destroy
     @campaign.destroy
@@ -70,9 +70,9 @@ class CampaignsController < ApplicationController
   end
 
   def campaign_params
-    params.require(:campaign).permit(:product_id, :description, :start_date, :end_date, :status, :image,
-                                     discount_attributes: [:id, :discount_type, :discount_value, :discount_amount])
+    params.require(:campaign).permit(:product_id, :user_id, :description, :start_date, :end_date, :status, :image, discount_attributes: [:id, :discount_type, :discount_value, :user_id])
   end
+  
   def discount_params
     params.require(:discount).permit(:discount_type, :discount_value)
   end
