@@ -20,6 +20,8 @@
       width: 100%;
       border-collapse: collapse;
       border: 1px solid #ddd;
+      overflow-x: auto; /* Permitir rolagem horizontal em telas pequenas */
+      white-space: nowrap; /* Impedir que o texto quebre em várias linhas */
     }
 
     th, td {
@@ -88,6 +90,13 @@
       text-align: center;
       margin-bottom: 20px; /* Espaço abaixo da frase */
     }
+
+    /* Estilo para tornar a tabela responsiva em telas pequenas */
+    @media (max-width: 768px) {
+      table {
+        font-size: 14px; /* Reduzir o tamanho da fonte para melhor ajuste */
+      }
+    }
   </style>
 </head>
 <body>
@@ -95,75 +104,77 @@
     Aproveite nossa campanha de descontos! Até 50% OFF em produtos selecionados.
   </div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Produto</th>
-        <th>Descrição</th>
-        <th>Preço original</th>
-        <th>Preço com Desconto</th>
-        <th>Status</th>
-        <th>Data de Início</th>
-        <th>Data de Término</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @campaigns.each do |campaign| %>
+  <div style="overflow-x: auto;">
+    <table>
+      <thead>
         <tr>
-          <td>
-            <% if campaign.image.attached? %>
-              <%= image_tag campaign.image, class: "img-thumbnail", style: "max-width: 100px; max-height: 100px;" %>
-            <% else %>
-              Sem imagem
-            <% end %>
-            <br>
-            <%= campaign.product.name %>
-          </td>
-          <td><%= campaign.description %></td>
-          <td><%= number_to_currency(campaign.original_price, unit: "R$", precision: 2) %></td>
-          <% if campaign.discount.present? && campaign.discount.discount_type == 'valor_fixo' %>
-            <% preço_descontado = campaign.original_price - campaign.discount.discount_value.to_f %>
-            <td><%= number_to_currency(preço_descontado, unit: "R$", precision: 2) %></td>
-          <% else %>
-            <td><%= number_to_currency(campaign.discounted_price, unit: "R$", precision: 2) %></td>
-          <% end %>
-          <td>
-            <% if campaign.ativo? %>
-              <i class="fas fa-check-circle status-icon" style="color: green;"></i>
-              Ativo
-            <% elsif campaign.expirado? %>
-              <i class="fas fa-times-circle status-icon" style="color: red;"></i>
-              Expirado
-            <% else %>
-              <i class="fas fa-clock status-icon" style="color: orange;"></i>
-              Agendado
-            <% end %>
-          </td>
-          <td><%= l(campaign.start_date) %></td>
-          <td><%= l(campaign.end_date) %></td>
-          <td class="actions">
-            <% if campaign.discount.present? %>
-              <%= link_to history_discount_campaign_discount_path(campaign, campaign.discount), class: 'link' do %>
-                <i class="fas fa-eye"></i> Histórico <!-- Ícone de olho -->
-              <% end %>
-            <% else %>
-              <span class="link">Sem desconto</span>
-            <% end %>
-            
-            <%= link_to edit_campaign_path(campaign), class: 'link' do %>
-              <i class="fas fa-pencil-alt"></i> <!-- Ícone de caneta -->
-            <% end %>
-            
-            <%= button_to campaign_path(campaign), method: :delete, data: { confirm: 'Tem certeza de que deseja excluir esta campanha?' }, class: 'link' do %>
-              <i class="fas fa-trash-alt"></i> <!-- Ícone de lixeira -->
-            <% end %>
-            
-          </td>
+          <th>Produto</th>
+          <th>Descrição</th>
+          <th>Preço original</th>
+          <th>Preço com Desconto</th>
+          <th>Status</th>
+          <th>Data de Início</th>
+          <th>Data de Término</th>
+          <th>Ações</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <% @campaigns.each do |campaign| %>
+          <tr>
+            <td>
+              <% if campaign.image.attached? %>
+                <%= image_tag campaign.image, class: "img-thumbnail", style: "max-width: 100px; max-height: 100px;" %>
+              <% else %>
+                Sem imagem
+              <% end %>
+              <br>
+              <%= campaign.product.name %>
+            </td>
+            <td><%= campaign.description %></td>
+            <td><%= number_to_currency(campaign.original_price, unit: "R$", precision: 2) %></td>
+            <% if campaign.discount.present? && campaign.discount.discount_type == 'valor_fixo' %>
+              <% preço_descontado = campaign.original_price - campaign.discount.discount_value.to_f %>
+              <td><%= number_to_currency(preço_descontado, unit: "R$", precision: 2) %></td>
+            <% else %>
+              <td><%= number_to_currency(campaign.discounted_price, unit: "R$", precision: 2) %></td>
+            <% end %>
+            <td>
+              <% if campaign.ativo? %>
+                <i class="fas fa-check-circle status-icon" style="color: green;"></i>
+                Ativo
+              <% elsif campaign.expirado? %>
+                <i class="fas fa-times-circle status-icon" style="color: red;"></i>
+                Expirado
+              <% else %>
+                <i class="fas fa-clock status-icon" style="color: orange;"></i>
+                Agendado
+              <% end %>
+            </td>
+            <td><%= l(campaign.start_date) %></td>
+            <td><%= l(campaign.end_date) %></td>
+            <td class="actions">
+              <% if campaign.discount.present? %>
+                <%= link_to history_discount_campaign_discount_path(campaign, campaign.discount), class: 'link' do %>
+                  <i class="fas fa-eye"></i> Histórico <!-- Ícone de olho -->
+                <% end %>
+              <% else %>
+                <span class="link">Sem desconto</span>
+              <% end %>
+              
+              <%= link_to edit_campaign_path(campaign), class: 'link' do %>
+                <i class="fas fa-pencil-alt"></i> <!-- Ícone de caneta -->
+              <% end %>
+              
+              <%= button_to campaign_path(campaign), method: :delete, data: { confirm: 'Tem certeza de que deseja excluir esta campanha?' }, class: 'link' do %>
+                <i class="fas fa-trash-alt"></i> <!-- Ícone de lixeira -->
+              <% end %>
+              
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 
   <%= link_to 'Nova Campanha', new_campaign_path, class: "btn btn-success" %>
 </body>
