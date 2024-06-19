@@ -4,7 +4,7 @@ class CampaignsController < ApplicationController
   before_action :load_products, only: [:new, :edit, :create, :update]
 
     def index
-      @campaigns = Campaign.paginate(page: params[:page], per_page: 10) # Ajuste `per_page` conforme necessário
+      @campaigns = Campaign.paginate(page: params[:page], per_page: 10) 
     end
   
   
