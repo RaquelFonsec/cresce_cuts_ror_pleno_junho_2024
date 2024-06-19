@@ -85,3 +85,4 @@ end
 gem 'httparty'
 gem 'paper_trail', '~> 12.0'
 gem 'diffy', '~> 3.4'
+gem 'will_paginate', '~> 3.3'

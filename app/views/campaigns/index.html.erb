@@ -4,66 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Todas Campanhas</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <style>
-    body {
-      background-color: #f0f0f0;
-      color: #333;
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-
-    table {
-      background-color: #fff;
-      color: #333;
-      width: 100%;
-      border-collapse: collapse;
-      border: 1px solid #ddd;
-    }
-
-    th, td {
-      border: 1px solid #ddd;
-      padding: 12px;
-      text-align: left;
-    }
-
-    th {
-      background-color: #f2f2f2;
-    }
-
-    .btn {
-      background-color: #007bff;
-      color: #fff;
-      text-decoration: none;
-      padding: 10px 20px;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
-      transition: background-color 0.3s;
-    }
-
-    .btn:hover {
-      background-color: #0056b3;
-    }
-
-    .link {
-      color: #007bff;
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-
-    .link:hover {
-      color: #0056b3;
+    .promo-message {
+      font-size: 24px;
+      color: #007bff; 
+      text-align: center;
+      margin-bottom: 20px;
     }
 
     .status-icon {
       margin-right: 8px;
-    }
-
-    .actions {
-      display: flex;
-      align-items: center;
     }
 
     .actions a, .actions button {
@@ -81,90 +33,95 @@
       margin-right: 4px;
     }
 
-    /* Estilo para a frase promocional */
-    .promo-message {
-      font-size: 24px;
-      color: #007bff; /* Azul */
-      text-align: center;
-      margin-bottom: 20px; /* Espaço abaixo da frase */
+    .pagination-links a, .pagination-links span {
+      margin: 0 5px;
     }
   </style>
 </head>
-<body>
-  <div class="promo-message">
-    Aproveite nossa campanha de descontos! Até 50% OFF em produtos selecionados.
+<body class="bg-light">
+  <div class="container py-4">
+    <div class="promo-message">
+      Aproveite nossa campanha de descontos! Até 50% OFF em produtos selecionados.
+    </div>
+
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Produto</th>
+          <th>Descrição</th>
+          <th>Preço original</th>
+          <th>Preço com Desconto</th>
+          <th>Status</th>
+          <th>Data de Início</th>
+          <th>Data de Término</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @campaigns.each do |campaign| %>
+          <tr>
+            <td>
+              <% if campaign.image.attached? %>
+                <%= image_tag campaign.image, class: "img-thumbnail", style: "max-width: 100px; max-height: 100px;" %>
+              <% else %>
+                Sem imagem
+              <% end %>
+              <br>
+              <%= campaign.product.name %>
+            </td>
+            <td><%= campaign.description %></td>
+            <td><%= number_to_currency(campaign.original_price, unit: "R$", precision: 2) %></td>
+            <% if campaign.discount.present? && campaign.discount.discount_type == 'valor_fixo' %>
+              <% preco_descontado = campaign.original_price - campaign.discount.discount_value.to_f %>
+              <td><%= number_to_currency(preco_descontado, unit: "R$", precision: 2) %></td>
+            <% else %>
+              <td><%= number_to_currency(campaign.discounted_price, unit: "R$", precision: 2) %></td>
+            <% end %>
+            <td>
+              <% if campaign.ativo? %>
+                <i class="fas fa-check-circle status-icon text-success"></i>
+                Ativo
+              <% elsif campaign.expirado? %>
+                <i class="fas fa-times-circle status-icon text-danger"></i>
+                Expirado
+              <% else %>
+                <i class="fas fa-clock status-icon text-warning"></i>
+                Agendado
+              <% end %>
+            </td>
+            <td><%= l(campaign.start_date) %></td>
+            <td><%= l(campaign.end_date) %></td>
+            <td class="actions">
+              <% if campaign.discount.present? %>
+                <%= link_to history_discount_campaign_discount_path(campaign, campaign.discount), class: 'btn btn-outline-primary btn-sm' do %>
+                  <i class="fas fa-eye"></i> Histórico
+                <% end %>
+              <% else %>
+                <span class="btn btn-outline-secondary btn-sm">Sem desconto</span>
+              <% end %>
+              
+              <%= link_to edit_campaign_path(campaign), class: 'btn btn-outline-warning btn-sm' do %>
+                <i class="fas fa-pencil-alt"></i> Editar
+              <% end %>
+              
+              <%= button_to campaign_path(campaign), method: :delete, data: { confirm: 'Tem certeza de que deseja excluir esta campanha?' }, class: 'btn btn-outline-danger btn-sm' do %>
+                <i class="fas fa-trash-alt"></i> Excluir
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <div class="pagination-links d-flex justify-content-center">
+      <%= will_paginate @campaigns, container: false, class: '' %>
+    </div>
+
+    <%= link_to 'Nova Campanha', new_campaign_path, class: "btn btn-success" %>
   </div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Produto</th>
-        <th>Descrição</th>
-        <th>Preço original</th>
-        <th>Preço com Desconto</th>
-        <th>Status</th>
-        <th>Data de Início</th>
-        <th>Data de Término</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @campaigns.each do |campaign| %>
-        <tr>
-          <td>
-            <% if campaign.image.attached? %>
-              <%= image_tag campaign.image, class: "img-thumbnail", style: "max-width: 100px; max-height: 100px;" %>
-            <% else %>
-              Sem imagem
-            <% end %>
-            <br>
-            <%= campaign.product.name %>
-          </td>
-          <td><%= campaign.description %></td>
-          <td><%= number_to_currency(campaign.original_price, unit: "R$", precision: 2) %></td>
-          <% if campaign.discount.present? && campaign.discount.discount_type == 'valor_fixo' %>
-            <% preço_descontado = campaign.original_price - campaign.discount.discount_value.to_f %>
-            <td><%= number_to_currency(preço_descontado, unit: "R$", precision: 2) %></td>
-          <% else %>
-            <td><%= number_to_currency(campaign.discounted_price, unit: "R$", precision: 2) %></td>
-          <% end %>
-          <td>
-            <% if campaign.ativo? %>
-              <i class="fas fa-check-circle status-icon" style="color: green;"></i>
-              Ativo
-            <% elsif campaign.expirado? %>
-              <i class="fas fa-times-circle status-icon" style="color: red;"></i>
-              Expirado
-            <% else %>
-              <i class="fas fa-clock status-icon" style="color: orange;"></i>
-              Agendado
-            <% end %>
-          </td>
-          <td><%= l(campaign.start_date) %></td>
-          <td><%= l(campaign.end_date) %></td>
-          <td class="actions">
-            <% if campaign.discount.present? %>
-              <%= link_to history_discount_campaign_discount_path(campaign, campaign.discount), class: 'link' do %>
-                <i class="fas fa-eye"></i> Histórico <!-- Ícone de olho -->
-              <% end %>
-            <% else %>
-              <span class="link">Sem desconto</span>
-            <% end %>
-            
-            <%= link_to edit_campaign_path(campaign), class: 'link' do %>
-              <i class="fas fa-pencil-alt"></i> <!-- Ícone de caneta -->
-            <% end %>
-            
-            <%= button_to campaign_path(campaign), method: :delete, data: { confirm: 'Tem certeza de que deseja excluir esta campanha?' }, class: 'link' do %>
-              <i class="fas fa-trash-alt"></i> <!-- Ícone de lixeira -->
-            <% end %>
-            
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-
-  <%= link_to 'Nova Campanha', new_campaign_path, class: "btn btn-success" %>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

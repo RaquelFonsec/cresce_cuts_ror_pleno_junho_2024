@@ -3,10 +3,12 @@ class CampaignsController < ApplicationController
   before_action :set_campaign, only: [:show, :edit, :update, :destroy]
   before_action :load_products, only: [:new, :edit, :create, :update]
 
-  def index
-    @campaigns = Campaign.includes(:product, :discount).all
-  end
-
+    def index
+      @campaigns = Campaign.paginate(page: params[:page], per_page: 10) # Ajuste `per_page` conforme necessário
+    end
+  
+  
+  
   def show
     @versions = @campaign.discount.versions if @campaign.discount.present?
   end
