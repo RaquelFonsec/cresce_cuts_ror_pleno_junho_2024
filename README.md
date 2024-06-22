@@ -19,7 +19,7 @@ O Gestor de Campanhas de Desconto é uma aplicação web desenvolvida em Ruby on
    - Interface intuitiva para definir descontos em produtos, com opções de porcentagem ou valor fixo.
 
 3. **Visualização de Campanhas**
-   - Exibe detalhes completos de cada campanha, incluindo foto do produto, preço original, preço com desconto aplicado, status (ativo, expirado), datas de início e término.
+   - Exibe detalhes completos de cada campanha, incluindo foto do produto,Descriçao, preço original, preço com desconto aplicado, status (ativo, expirado), datas de início e término.
    - Histórico de alterações registra todas as modificações feitas nas campanhas, proporcionando transparência e rastreabilidade.
 
 4. **Persistência de Dados**
