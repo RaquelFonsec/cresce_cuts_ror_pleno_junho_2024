@@ -40,7 +40,7 @@ O Gestor de Campanhas de Desconto é uma aplicação web desenvolvida em Ruby on
 ## Gems Utilizadas
 
 - **Autenticação**: devise
-- **Testes**: rspec-rails, capybara, factory_bot_rails, database_cleaner-active_record
+- **Testes**: rspec-rails, capybara, factory_bot_rails, database_cleaner-active_record,rails-controller-testing,faker
 - **Integração com APIs**: httparty
 - **Auditoria de Alterações**: paper_trail para versionamento de registros
 - **Paginação**: will_paginate para navegação por páginas
